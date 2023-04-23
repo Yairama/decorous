@@ -54,17 +54,16 @@ pub fn ui_example_system(
                 }
 
                 if ui.button("Exit").clicked() {
-                    // Lógica para salir de la aplicación
                     println!("Exit clicked");
                 }
             });
-            // Agrega más elementos de menú según sea necesario
+
         });
     });
 
     egui::TopBottomPanel::bottom("bottom_menu_bar").show(ctx, |ui| {
         egui::menu::bar(ui, |ui| {
-            // Agrega más elementos de menú según sea necesario
+
             ui.label("FPS: ");
         });
     });
@@ -125,13 +124,13 @@ pub fn ui_example_system(
                         println!("Total points: {}", _points.len());
                         println!("Bulge: {}", count);
 
-                        let topo = Topography::from_dxf(_points);
+                        let (mesh, topo): (Mesh, Topography) = Topography::from_dxf(_points);
 
-                        commands.spawn(PbrBundle{
-                            mesh: meshes.add(topo.mesh),
+                        commands.spawn((PbrBundle{
+                            mesh: meshes.add(mesh),
                             material: materials.add(Color::rgb(0.3, 0.5, 0.3).into()),
                             ..Default::default()
-                        });
+                        }, topo));
                         dxf.is_drawn = true;
                     }
                 }
