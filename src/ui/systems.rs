@@ -69,8 +69,6 @@ pub fn ui_example_system(
     });
 
 
-
-
     egui::SidePanel::left("side_panel")
         .min_width(200.0)
         .max_width(400.0)
@@ -88,12 +86,11 @@ pub fn ui_example_system(
                 for mut dxf in dxf_files_query.iter_mut(){
                     let visible = dxf.visible;
                     let drawn = dxf.is_drawn;
-                    let mut count = 0.0;
                     if visible && !drawn  {
                         let mut _points : Vec<[f64;3]> = Vec::new();
                         let path = dxf.path();
                         let drawing = Drawing::load_file(&path).unwrap();
-                        for e in drawing.entities {
+                        for e in drawing.entities() {
                             match e.specific {
                                 // EntityType::Line(ref _line) => {
                                 //     let p1 = _line.p1.clone();
@@ -104,13 +101,13 @@ pub fn ui_example_system(
                                 // },
                                 EntityType::LwPolyline(ref _lw_polyline) => {
                                     let vertices = &_lw_polyline.vertices;
+                                    let z = _lw_polyline.elevation;
                                     for point in vertices{
-                                        _points.push([point.x, point.y, point.bulge]);
-                                        count+=point.bulge;
+                                        _points.push([point.x, point.y, z]);
                                     }
                                 },
                                 EntityType::Polyline(ref p_line) => {
-                                    let vertices = &p_line.vertices;
+                                    let vertices = p_line.vertices();
                                     for ver in vertices{
                                         let p = ver.location.clone();
                                         _points.push([p.x, p.y, p.z]);
@@ -122,7 +119,6 @@ pub fn ui_example_system(
                         }
 
                         println!("Total points: {}", _points.len());
-                        println!("Bulge: {}", count);
 
                         let (mesh, topo): (Mesh, Topography) = Topography::from_dxf(_points);
 
@@ -143,8 +139,5 @@ pub fn ui_example_system(
             
     });
 
-
-
-    
 
 }

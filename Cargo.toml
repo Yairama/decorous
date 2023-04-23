@@ -11,5 +11,5 @@ bevy_egui = "0.20"
 bevy_flycam = "0.10.1"
 bevy_infinite_grid = { git = "https://github.com/PikminGuts92/bevy_infinite_grid", branch = "bevy-0.10" }
 rfd = "0.11.3"
-dxf = "0.4.0"
+dxf = { git = "https://github.com/Yairama/dxf-rs", branch = "main" }
 delaunator = "1.0.2"
