@@ -48,8 +48,7 @@ pub fn ui_example_system(
                     if let Some(path) = rfd::FileDialog::new().add_filter("CSV files Assay", &["csv"]).pick_file() {
                         let csv_assay: CsvFile = CsvFile{path: Some(path.display().to_string()).unwrap(), visible: true};
                         println!("opened Assay file {}", csv_assay.name());
-                        commands.spawn(csv_assay);
-                        
+                        commands.spawn(csv_assay);   
                     }
                 }
 
