@@ -1,15 +1,11 @@
-use bevy::{prelude::*, pbr::{wireframe::WireframeConfig, CascadeShadowConfigBuilder}};
+use bevy::{prelude::*, pbr::{CascadeShadowConfigBuilder}};
 use bevy_infinite_grid::{GridShadowCamera, InfiniteGrid, InfiniteGridBundle};
-use bevy_flycam::FlyCam;
-
 
 pub fn setup_system(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut standard_materials: ResMut<Assets<StandardMaterial>>,
-    mut wireframe_config: ResMut<WireframeConfig>,
 ) {
-    wireframe_config.global = false;
 
     commands.spawn(InfiniteGridBundle {
         grid: InfiniteGrid {
@@ -25,7 +21,6 @@ pub fn setup_system(
 
             ..Default::default()
         })
-        .insert(FlyCam)
         .insert(GridShadowCamera);
 
     commands.spawn(DirectionalLightBundle {

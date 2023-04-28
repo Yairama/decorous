@@ -6,10 +6,27 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = "0.10"
+bevy = {version="0.10", features=[
+    "bevy_scene",
+    "bevy_text",
+    "bevy_ui",
+    "bevy_sprite",
+    "bevy_pbr",
+    "bevy_core_pipeline",
+]}
 bevy_egui = "0.20"
-bevy_flycam = "0.10.1"
 bevy_infinite_grid = { git = "https://github.com/PikminGuts92/bevy_infinite_grid", branch = "bevy-0.10" }
 rfd = "0.11.3"
 dxf = { git = "https://github.com/Yairama/dxf-rs", branch = "main" }
 delaunator = "1.0.2"
+
+
+bevy-inspector-egui = "0.18.3"
+egui_dock = "0.4.0"
+indexmap = "1.9.3"
+pretty-type-name = "1.0.1"
+opener = "0.6.1"
+egui = "0.21.0"
+egui-gizmo = "0.10.0"
+bevy_framepace = "0.12.1"
+bevy_mod_debugdump = "0.7.0"
