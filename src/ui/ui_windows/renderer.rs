@@ -1,5 +1,5 @@
 use bevy::{pbr::DirectionalLightShadowMap, prelude::*, render::renderer::RenderDevice};
-use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext};
+use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::{
     egui::{self, RichText},
     inspector_options::std_options::NumberOptions,
@@ -11,6 +11,7 @@ pub struct RendererWindow;
 impl EditorWindow for RendererWindow {
     type State = ();
     const NAME: &'static str = "Renderer";
+    const MENU_BAR : MenuBarWindow = MenuBarWindow::Edit;
     const DEFAULT_SIZE: (f32, f32) = (480.0, 240.0);
 
     fn ui(world: &mut World, _: EditorWindowContext, ui: &mut egui::Ui) {

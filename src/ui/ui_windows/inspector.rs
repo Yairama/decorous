@@ -5,7 +5,7 @@ use super::hierarchy::HierarchyWindow;
 use bevy::asset::HandleId;
 use bevy::prelude::{AppTypeRegistry, Entity, World};
 use bevy::reflect::TypeRegistryInternal;
-use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext};
+use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::bevy_inspector::hierarchy::SelectedEntities;
 use bevy_inspector_egui::{bevy_inspector, egui};
 
@@ -31,6 +31,7 @@ impl Default for InspectorState {
 pub struct InspectorWindow;
 impl EditorWindow for InspectorWindow {
     type State = InspectorState;
+    const MENU_BAR : MenuBarWindow = MenuBarWindow::Edit;
     const NAME: &'static str = "Inspector";
 
     fn ui(world: &mut World, cx: EditorWindowContext, ui: &mut egui::Ui) {

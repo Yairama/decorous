@@ -1,0 +1,1209 @@
+(
+  entities: {
+    0: (
+      components: {
+        "bevy_window::window::Window": (
+          cursor: (
+            icon: Default,
+            visible: true,
+            grab_mode: None,
+            hit_test: true,
+            physical_position: Some((
+              x: 159.0,
+              y: 642.0,
+            )),
+          ),
+          present_mode: Fifo,
+          mode: Windowed,
+          position: Automatic,
+          resolution: (
+            physical_width: 1280,
+            physical_height: 720,
+            scale_factor_override: None,
+            scale_factor: 1.0,
+          ),
+          title: "Decorous",
+          composite_alpha_mode: Auto,
+          resize_constraints: (
+            min_width: 180.0,
+            min_height: 120.0,
+            max_width: inf,
+            max_height: inf,
+          ),
+          resizable: true,
+          decorations: true,
+          transparent: false,
+          focused: true,
+          window_level: Normal,
+          canvas: None,
+          fit_canvas_to_parent: false,
+          prevent_default_event_handling: true,
+          internal: (
+            minimize_request: None,
+            maximize_request: None,
+          ),
+          ime_enabled: false,
+          ime_position: (
+            x: 0.0,
+            y: 0.0,
+          ),
+        ),
+      },
+    ),
+    4: (
+      components: {
+        "bevy_transform::components::transform::Transform": (
+          translation: (
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+          ),
+          rotation: (0.0, 0.0, 0.0, 1.0),
+          scale: (
+            x: 1.0,
+            y: 1.0,
+            z: 1.0,
+          ),
+        ),
+        "bevy_transform::components::global_transform::GlobalTransform": ((
+          matrix3: (
+            x_axis: (
+              x: 1.0,
+              y: 0.0,
+              z: 0.0,
+            ),
+            y_axis: (
+              x: 0.0,
+              y: 1.0,
+              z: 0.0,
+            ),
+            z_axis: (
+              x: 0.0,
+              y: 0.0,
+              z: 1.0,
+            ),
+          ),
+          translation: (
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+          ),
+        )),
+        "bevy_render::view::visibility::VisibleEntities": (),
+        "bevy_render::view::visibility::Visibility": Inherited,
+        "bevy_render::view::visibility::ComputedVisibility": (
+          flags: (
+            bits: 2,
+          ),
+        ),
+      },
+    ),
+    5: (
+      components: {
+        "bevy_transform::components::transform::Transform": (
+          translation: (
+            x: 0.0,
+            y: 4.37,
+            z: 14.77,
+          ),
+          rotation: (0.0, 0.0, 0.0, 1.0),
+          scale: (
+            x: 1.0,
+            y: 1.0,
+            z: 1.0,
+          ),
+        ),
+        "bevy_transform::components::global_transform::GlobalTransform": ((
+          matrix3: (
+            x_axis: (
+              x: 1.0,
+              y: 0.0,
+              z: 0.0,
+            ),
+            y_axis: (
+              x: 0.0,
+              y: 1.0,
+              z: 0.0,
+            ),
+            z_axis: (
+              x: 0.0,
+              y: 0.0,
+              z: 1.0,
+            ),
+          ),
+          translation: (
+            x: 0.0,
+            y: 4.37,
+            z: 14.77,
+          ),
+        )),
+        "bevy_hierarchy::components::children::Children": ([
+          (
+            generation: 0,
+            index: 10,
+          ),
+        ]),
+        "bevy_render::camera::camera::Camera": (
+          viewport: None,
+          order: 0,
+          is_active: true,
+          hdr: false,
+          msaa_writeback: true,
+        ),
+        "bevy_render::camera::projection::Projection": Perspective((
+          fov: 0.7853982,
+          aspect_ratio: 1.7777778,
+          near: 0.1,
+          far: 1000.0,
+        )),
+        "bevy_render::camera::camera::CameraRenderGraph": ("core_3d"),
+        "bevy_render::view::visibility::VisibleEntities": (),
+        "bevy_render::primitives::Frustum": (),
+        "bevy_core_pipeline::core_3d::camera_3d::Camera3d": (
+          clear_color: Default,
+          depth_load_op: Clear(0.0),
+        ),
+        "bevy_core_pipeline::tonemapping::Tonemapping": ReinhardLuminance,
+        "bevy_core_pipeline::tonemapping::DebandDither": Enabled,
+        "bevy_render::view::ColorGrading": (
+          exposure: 0.0,
+          gamma: 1.0,
+          pre_saturation: 1.0,
+          post_saturation: 1.0,
+        ),
+        "bevy_render::view::visibility::Visibility": Visible,
+        "bevy_render::view::visibility::ComputedVisibility": (
+          flags: (
+            bits: 2,
+          ),
+        ),
+        "bevy_pbr::light::ClusterConfig": FixedZ(
+          total: 4096,
+          z_slices: 24,
+          z_config: (
+            first_slice_depth: 5.0,
+            far_z_mode: MaxLightRange,
+          ),
+          dynamic_resizing: true,
+        ),
+      },
+    ),
+    6: (
+      components: {
+        "bevy_transform::components::transform::Transform": (
+          translation: (
+            x: 15.0,
+            y: 20.0,
+            z: 0.0,
+          ),
+          rotation: (-0.31622776, 0.6324555, 0.31622776, 0.6324555),
+          scale: (
+            x: 1.0,
+            y: 1.0,
+            z: 1.0,
+          ),
+        ),
+        "bevy_transform::components::global_transform::GlobalTransform": ((
+          matrix3: (
+            x_axis: (
+              x: 0.0,
+              y: 0.0,
+              z: -1.0,
+            ),
+            y_axis: (
+              x: -0.8,
+              y: 0.6,
+              z: 0.0,
+            ),
+            z_axis: (
+              x: 0.6,
+              y: 0.8,
+              z: 0.0,
+            ),
+          ),
+          translation: (
+            x: 15.0,
+            y: 20.0,
+            z: 0.0,
+          ),
+        )),
+        "bevy_hierarchy::components::children::Children": ([
+          (
+            generation: 0,
+            index: 9,
+          ),
+        ]),
+        "bevy_render::view::visibility::Visibility": Inherited,
+        "bevy_render::view::visibility::ComputedVisibility": (
+          flags: (
+            bits: 2,
+          ),
+        ),
+        "bevy_pbr::light::DirectionalLight": (
+          color: Rgba(
+            red: 1.0,
+            green: 1.0,
+            blue: 1.0,
+            alpha: 1.0,
+          ),
+          illuminance: 100000.0,
+          shadows_enabled: true,
+          shadow_depth_bias: 0.02,
+          shadow_normal_bias: 0.6,
+        ),
+        "bevy_render::primitives::CascadesFrusta": (),
+        "bevy_pbr::light::Cascades": (
+          cascades: {
+            (
+              generation: 0,
+              index: 2,
+            ): [
+              (
+                view_transform: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.0,
+                    z: -1.0,
+                    w: -0.0,
+                  ),
+                  y_axis: (
+                    x: -0.8,
+                    y: 0.6,
+                    z: -0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.6,
+                    y: 0.8,
+                    z: 0.0,
+                    w: -0.0,
+                  ),
+                  w_axis: (
+                    x: 1.6204026,
+                    y: 6.525771,
+                    z: 12.720703,
+                    w: 1.0,
+                  ),
+                ),
+                projection: (
+                  x_axis: (
+                    x: 0.33333334,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.33333334,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.18540092,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 1.0,
+                    w: 1.0,
+                  ),
+                ),
+                view_projection: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.26666668,
+                    z: 0.11124056,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.20000002,
+                    z: 0.14832073,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: -0.33333334,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: 4.2402344,
+                    y: -0.8730469,
+                    z: -0.14816165,
+                    w: 1.0,
+                  ),
+                ),
+                texel_size: 0.0029296875,
+              ),
+              (
+                view_transform: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.0,
+                    z: -1.0,
+                    w: -0.0,
+                  ),
+                  y_axis: (
+                    x: -0.8,
+                    y: 0.6,
+                    z: -0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.6,
+                    y: 0.8,
+                    z: 0.0,
+                    w: -0.0,
+                  ),
+                  w_axis: (
+                    x: 21.983414,
+                    y: 33.634945,
+                    z: -13.948731,
+                    w: 1.0,
+                  ),
+                ),
+                projection: (
+                  x_axis: (
+                    x: 0.025974026,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.025974026,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.013660454,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 1.0,
+                    w: 1.0,
+                  ),
+                ),
+                view_projection: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.02077922,
+                    z: 0.008196273,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.015584416,
+                    z: 0.010928364,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: -0.025974026,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: -0.3623047,
+                    y: -0.06738281,
+                    z: 0.4522431,
+                    w: 1.0,
+                  ),
+                ),
+                texel_size: 0.037597656,
+              ),
+              (
+                view_transform: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.0,
+                    z: -1.0,
+                    w: -0.0,
+                  ),
+                  y_axis: (
+                    x: -0.8,
+                    y: 0.6,
+                    z: -0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.6,
+                    y: 0.8,
+                    z: 0.0,
+                    w: -0.0,
+                  ),
+                  w_axis: (
+                    x: 298.12573,
+                    y: 401.73276,
+                    z: -375.27344,
+                    w: 1.0,
+                  ),
+                ),
+                projection: (
+                  x_axis: (
+                    x: 0.0019230769,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.0019230769,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.0010065109,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 1.0,
+                    w: 1.0,
+                  ),
+                ),
+                view_projection: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.0015384615,
+                    z: 0.0006039066,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.0011538462,
+                    z: 0.00080520875,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: -0.0019230769,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: -0.7216797,
+                    y: -0.0048828125,
+                    z: 0.49648118,
+                    w: 1.0,
+                  ),
+                ),
+                texel_size: 0.5078125,
+              ),
+              (
+                view_transform: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.0,
+                    z: -1.0,
+                    w: -0.0,
+                  ),
+                  y_axis: (
+                    x: -0.8,
+                    y: 0.6,
+                    z: -0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.6,
+                    y: 0.8,
+                    z: 0.0,
+                    w: -0.0,
+                  ),
+                  w_axis: (
+                    x: 4047.3862,
+                    y: 5396.515,
+                    z: -5279.341,
+                    w: 1.0,
+                  ),
+                ),
+                projection: (
+                  x_axis: (
+                    x: 0.00014169324,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.00014169324,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.00007416035,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 1.0,
+                    w: 1.0,
+                  ),
+                ),
+                view_projection: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.00011335459,
+                    z: 0.000044496213,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.00008501594,
+                    z: 0.000059328282,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: -0.00014169324,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: -0.7480469,
+                    y: 0.0,
+                    z: 0.49974072,
+                    w: 1.0,
+                  ),
+                ),
+                texel_size: 6.89209,
+              ),
+            ],
+            (
+              generation: 0,
+              index: 5,
+            ): [
+              (
+                view_transform: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.0,
+                    z: -1.0,
+                    w: -0.0,
+                  ),
+                  y_axis: (
+                    x: -0.8,
+                    y: 0.6,
+                    z: -0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.6,
+                    y: 0.8,
+                    z: 0.0,
+                    w: -0.0,
+                  ),
+                  w_axis: (
+                    x: 1.8560112,
+                    y: 6.843985,
+                    z: 12.72168,
+                    w: 1.0,
+                  ),
+                ),
+                projection: (
+                  x_axis: (
+                    x: 0.2857143,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.2857143,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.16166607,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 1.0,
+                    w: 1.0,
+                  ),
+                ),
+                view_projection: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.22857144,
+                    z: 0.096999645,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.17142859,
+                    z: 0.12933286,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: -0.2857143,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: 3.6347659,
+                    y: -0.7490235,
+                    z: -0.065184474,
+                    w: 1.0,
+                  ),
+                ),
+                texel_size: 0.0034179688,
+              ),
+              (
+                view_transform: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.0,
+                    z: -1.0,
+                    w: -0.0,
+                  ),
+                  y_axis: (
+                    x: -0.8,
+                    y: 0.6,
+                    z: -0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.6,
+                    y: 0.8,
+                    z: 0.0,
+                    w: -0.0,
+                  ),
+                  w_axis: (
+                    x: 25.198635,
+                    y: 37.940628,
+                    z: -13.970703,
+                    w: 1.0,
+                  ),
+                ),
+                projection: (
+                  x_axis: (
+                    x: 0.02173913,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.02173913,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.011911658,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 1.0,
+                    w: 1.0,
+                  ),
+                ),
+                view_projection: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.017391305,
+                    z: 0.007146995,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.013043479,
+                    z: 0.009529326,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: -0.02173913,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: -0.30371094,
+                    y: -0.056640625,
+                    z: 0.45835686,
+                    w: 1.0,
+                  ),
+                ),
+                texel_size: 0.044921875,
+              ),
+              (
+                view_transform: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.0,
+                    z: -1.0,
+                    w: -0.0,
+                  ),
+                  y_axis: (
+                    x: -0.8,
+                    y: 0.6,
+                    z: -0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.6,
+                    y: 0.8,
+                    z: 0.0,
+                    w: -0.0,
+                  ),
+                  w_axis: (
+                    x: 341.9694,
+                    y: 460.01514,
+                    z: -374.77347,
+                    w: 1.0,
+                  ),
+                ),
+                projection: (
+                  x_axis: (
+                    x: 0.0016051364,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.0016051364,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.00087765837,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 1.0,
+                    w: 1.0,
+                  ),
+                ),
+                view_projection: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.0012841092,
+                    z: 0.00052659505,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.0009630819,
+                    z: 0.0007021267,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: -0.0016051364,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: -0.6015625,
+                    y: -0.00390625,
+                    z: 0.49693173,
+                    w: 1.0,
+                  ),
+                ),
+                texel_size: 0.60839844,
+              ),
+              (
+                view_transform: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.0,
+                    z: -1.0,
+                    w: -0.0,
+                  ),
+                  y_axis: (
+                    x: -0.8,
+                    y: 0.6,
+                    z: -0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.6,
+                    y: 0.8,
+                    z: 0.0,
+                    w: -0.0,
+                  ),
+                  w_axis: (
+                    x: 4641.291,
+                    y: 6188.388,
+                    z: -5272.3745,
+                    w: 1.0,
+                  ),
+                ),
+                projection: (
+                  x_axis: (
+                    x: 0.0001183572,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.0001183572,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.00006466641,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: 0.0,
+                    y: 0.0,
+                    z: 1.0,
+                    w: 1.0,
+                  ),
+                ),
+                view_projection: (
+                  x_axis: (
+                    x: 0.0,
+                    y: -0.00009468576,
+                    z: 0.000038799848,
+                    w: 0.0,
+                  ),
+                  y_axis: (
+                    x: 0.0,
+                    y: 0.00007101432,
+                    z: 0.000051733132,
+                    w: 0.0,
+                  ),
+                  z_axis: (
+                    x: -0.0001183572,
+                    y: 0.0,
+                    z: 0.0,
+                    w: 0.0,
+                  ),
+                  w_axis: (
+                    x: -0.62402344,
+                    y: 0.0,
+                    z: 0.49977392,
+                    w: 1.0,
+                  ),
+                ),
+                texel_size: 8.250977,
+              ),
+            ],
+          },
+        ),
+        "bevy_pbr::light::CascadeShadowConfig": (
+          bounds: [
+            4.0,
+            54.288357,
+            736.8064,
+            10000.003,
+          ],
+          overlap_proportion: 0.2,
+          minimum_distance: 0.1,
+        ),
+        "bevy_pbr::bundle::CascadesVisibleEntities": (),
+      },
+    ),
+    7: (
+      components: {
+        "bevy_transform::components::transform::Transform": (
+          translation: (
+            x: -5.839624,
+            y: -4.839723,
+            z: -8.840189,
+          ),
+          rotation: (0.3250576, 0.0, -0.3250576, 0.88807386),
+          scale: (
+            x: 1.5,
+            y: 1.5,
+            z: 1.5,
+          ),
+        ),
+        "bevy_transform::components::global_transform::GlobalTransform": ((
+          matrix3: (
+            x_axis: (
+              x: 1.1830127,
+              y: -0.86602545,
+              z: -0.31698734,
+            ),
+            y_axis: (
+              x: 0.86602545,
+              y: 0.8660254,
+              z: 0.86602545,
+            ),
+            z_axis: (
+              x: -0.31698734,
+              y: -0.86602545,
+              z: 1.1830127,
+            ),
+          ),
+          translation: (
+            x: -5.839624,
+            y: -4.839723,
+            z: -8.840189,
+          ),
+        )),
+        "bevy_render::view::visibility::Visibility": Inherited,
+        "bevy_render::view::visibility::ComputedVisibility": (
+          flags: (
+            bits: 2,
+          ),
+        ),
+        "bevy_asset::handle::Handle<bevy_render::mesh::mesh::Mesh>": (
+          id: Id("8ecbac0f-f545-4473-ad43-e1f4243af51e", 15633680070563130303),
+        ),
+        "bevy_asset::handle::Handle<bevy_pbr::pbr_material::StandardMaterial>": (
+          id: Id("7494888b-c082-457b-aacf-517228cc0c22", 17644882912609580555),
+        ),
+        "bevy_render::primitives::Aabb": (
+          center: (
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+          ),
+          half_extents: (
+            x: 0.5,
+            y: 0.5,
+            z: 0.5,
+          ),
+        ),
+      },
+    ),
+    8: (
+      components: {
+        "bevy_transform::components::transform::Transform": (
+          translation: (
+            x: 5.489375,
+            y: 2.0,
+            z: 0.0,
+          ),
+          rotation: (0.0, 0.0, 0.0, 1.0),
+          scale: (
+            x: 1.0,
+            y: 1.0,
+            z: 1.0,
+          ),
+        ),
+        "bevy_transform::components::global_transform::GlobalTransform": ((
+          matrix3: (
+            x_axis: (
+              x: 1.0,
+              y: 0.0,
+              z: 0.0,
+            ),
+            y_axis: (
+              x: 0.0,
+              y: 1.0,
+              z: 0.0,
+            ),
+            z_axis: (
+              x: 0.0,
+              y: 0.0,
+              z: 1.0,
+            ),
+          ),
+          translation: (
+            x: 5.489375,
+            y: 2.0,
+            z: 0.0,
+          ),
+        )),
+        "bevy_render::view::visibility::Visibility": Inherited,
+        "bevy_render::view::visibility::ComputedVisibility": (
+          flags: (
+            bits: 2,
+          ),
+        ),
+        "bevy_asset::handle::Handle<bevy_render::mesh::mesh::Mesh>": (
+          id: Id("8ecbac0f-f545-4473-ad43-e1f4243af51e", 17859195643973402386),
+        ),
+        "bevy_asset::handle::Handle<bevy_pbr::pbr_material::StandardMaterial>": (
+          id: Id("7494888b-c082-457b-aacf-517228cc0c22", 17644882912609580555),
+        ),
+        "bevy_render::primitives::Aabb": (
+          center: (
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+          ),
+          half_extents: (
+            x: 1.0,
+            y: 1.0,
+            z: 1.0,
+          ),
+        ),
+      },
+    ),
+    9: (
+      components: {
+        "bevy_transform::components::transform::Transform": (
+          translation: (
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+          ),
+          rotation: (0.0, 0.0, 0.0, 1.0),
+          scale: (
+            x: 1.0,
+            y: 1.0,
+            z: 1.0,
+          ),
+        ),
+        "bevy_transform::components::global_transform::GlobalTransform": ((
+          matrix3: (
+            x_axis: (
+              x: 0.0,
+              y: 0.0,
+              z: -1.0,
+            ),
+            y_axis: (
+              x: -0.8,
+              y: 0.6,
+              z: 0.0,
+            ),
+            z_axis: (
+              x: 0.6,
+              y: 0.8,
+              z: 0.0,
+            ),
+          ),
+          translation: (
+            x: 15.0,
+            y: 20.0,
+            z: 0.0,
+          ),
+        )),
+        "bevy_hierarchy::components::parent::Parent": ((
+          generation: 0,
+          index: 6,
+        )),
+        "bevy_core::name::Name": (
+          hash: 12702738367594456588,
+          name: "DirectionalLight Gizmo",
+        ),
+        "bevy_render::view::visibility::render_layers::RenderLayers": (524288),
+        "bevy_render::view::visibility::Visibility": Inherited,
+        "bevy_render::view::visibility::ComputedVisibility": (
+          flags: (
+            bits: 2,
+          ),
+        ),
+        "bevy_asset::handle::Handle<bevy_render::mesh::mesh::Mesh>": (
+          id: Id("8ecbac0f-f545-4473-ad43-e1f4243af51e", 11774406454119355949),
+        ),
+        "bevy_asset::handle::Handle<bevy_pbr::pbr_material::StandardMaterial>": (
+          id: Id("7494888b-c082-457b-aacf-517228cc0c22", 12520920009773395374),
+        ),
+        "bevy_render::primitives::Aabb": (
+          center: (
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+          ),
+          half_extents: (
+            x: 0.3,
+            y: 0.3,
+            z: 0.3,
+          ),
+        ),
+      },
+    ),
+    10: (
+      components: {
+        "bevy_transform::components::transform::Transform": (
+          translation: (
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+          ),
+          rotation: (0.0, 0.0, 0.0, 1.0),
+          scale: (
+            x: 1.0,
+            y: 1.0,
+            z: 1.0,
+          ),
+        ),
+        "bevy_transform::components::global_transform::GlobalTransform": ((
+          matrix3: (
+            x_axis: (
+              x: 1.0,
+              y: 0.0,
+              z: 0.0,
+            ),
+            y_axis: (
+              x: 0.0,
+              y: 1.0,
+              z: 0.0,
+            ),
+            z_axis: (
+              x: 0.0,
+              y: 0.0,
+              z: 1.0,
+            ),
+          ),
+          translation: (
+            x: 0.0,
+            y: 4.37,
+            z: 14.77,
+          ),
+        )),
+        "bevy_hierarchy::components::parent::Parent": ((
+          generation: 0,
+          index: 5,
+        )),
+        "bevy_core::name::Name": (
+          hash: 10282832683769817739,
+          name: "Camera Gizmo",
+        ),
+        "bevy_render::view::visibility::render_layers::RenderLayers": (524288),
+        "bevy_render::view::visibility::Visibility": Inherited,
+        "bevy_render::view::visibility::ComputedVisibility": (
+          flags: (
+            bits: 2,
+          ),
+        ),
+        "bevy_asset::handle::Handle<bevy_render::mesh::mesh::Mesh>": (
+          id: Id("8ecbac0f-f545-4473-ad43-e1f4243af51e", 11774406454119355949),
+        ),
+        "bevy_asset::handle::Handle<bevy_pbr::pbr_material::StandardMaterial>": (
+          id: Id("7494888b-c082-457b-aacf-517228cc0c22", 7539314947883369428),
+        ),
+        "bevy_render::primitives::Aabb": (
+          center: (
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+          ),
+          half_extents: (
+            x: 0.3,
+            y: 0.3,
+            z: 0.3,
+          ),
+        ),
+      },
+    ),
+  },
+)

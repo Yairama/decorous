@@ -3,7 +3,7 @@ use bevy::{
     prelude::{AppTypeRegistry, World},
     reflect::TypeRegistryInternal,
 };
-use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext};
+use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::egui;
 
 use super::inspector::{InspectorSelection, InspectorWindow};
@@ -12,6 +12,7 @@ pub struct AssetsWindow;
 
 impl EditorWindow for AssetsWindow {
     type State = ();
+    const MENU_BAR : MenuBarWindow = MenuBarWindow::Edit;
     const NAME: &'static str = "Assets";
 
     fn ui(world: &mut World, mut cx: EditorWindowContext, ui: &mut egui::Ui) {

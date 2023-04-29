@@ -1,13 +1,13 @@
 use std::any::{Any, TypeId};
 
 use bevy::ecs::event::Events;
-use bevy::window::WindowMode;
+use bevy::window::{WindowMode, self};
 use bevy::{prelude::*, utils::HashMap};
 use bevy_inspector_egui::bevy_egui::{egui, EguiContext};
 use egui_dock::{NodeIndex, TabIndex};
 use indexmap::IndexMap;
 
-use super::editor_window::{EditorWindow, EditorWindowContext};
+use super::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 
 #[non_exhaustive]
 pub enum EditorEvent {
@@ -111,6 +111,7 @@ struct EditorWindowData {
     viewport_toolbar_ui_fn: UiFn,
     viewport_ui_fn: UiFn,
     default_size: (f32, f32),
+    menu_bar_window: MenuBarWindow
 }
 
 #[derive(Resource)]
@@ -244,6 +245,7 @@ impl Editor {
             viewport_ui_fn,
             name: W::NAME,
             default_size: W::DEFAULT_SIZE,
+            menu_bar_window: W::MENU_BAR
         };
         if self.windows.insert(type_id, data).is_some() {
             panic!(
@@ -348,6 +350,8 @@ impl Editor {
         }
     }
 
+/// Here add the menu bar buttons
+
     fn editor_menu_bar(
         &mut self,
         world: &mut World,
@@ -364,8 +368,9 @@ impl Editor {
                     });
                 }
 
-                ui.menu_button("Open window", |ui| {
-                    for (&_, window) in self.windows.iter() {
+
+                ui.menu_button("File", |ui| {
+                    for (&_, window) in self.windows.iter().filter(|(_, data)| data.menu_bar_window == MenuBarWindow::File) {
                         let cx = EditorWindowContext {
                             window_states: &mut self.window_states,
                             internal_state,
@@ -373,6 +378,27 @@ impl Editor {
                         (window.menu_ui_fn)(world, cx, ui);
                     }
                 });
+
+                ui.menu_button("Edit", |ui| {
+                    for (&_, window) in self.windows.iter().filter(|(_, data)| data.menu_bar_window == MenuBarWindow::Edit) {
+                        let cx = EditorWindowContext {
+                            window_states: &mut self.window_states,
+                            internal_state,
+                        };
+                        (window.menu_ui_fn)(world, cx, ui);
+                    }
+                });
+
+                ui.menu_button("About", |ui| {
+                    for (&_, window) in self.windows.iter().filter(|(_, data)| data.menu_bar_window == MenuBarWindow::About) {
+                        let cx = EditorWindowContext {
+                            window_states: &mut self.window_states,
+                            internal_state,
+                        };
+                        (window.menu_ui_fn)(world, cx, ui);
+                    }
+                });
+
             })
             .response
             .interact(egui::Sense::click());
@@ -514,7 +540,6 @@ impl egui_dock::TabViewer for TabViewer<'_> {
                     ui.style_mut().spacing.button_padding = egui::vec2(2.0, 0.0);
                     let height = ui.spacing().interact_size.y;
                     ui.set_min_size(egui::vec2(ui.available_width(), height));
-
                     self.editor
                         .editor_viewport_toolbar_ui(self.world, ui, self.internal_state);
                 });

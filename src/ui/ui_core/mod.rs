@@ -57,7 +57,7 @@ impl Plugin for EditorPlugin {
                     .world
                     .query_filtered::<Entity, With<PrimaryWindow>>()
                     .single(&app.world);
-                (entity, false)
+                (entity, true)
             }
             WindowRef::Entity(entity) => (entity, true),
         };

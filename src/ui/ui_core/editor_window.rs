@@ -5,12 +5,21 @@ use std::any::{Any, TypeId};
 
 use super::editor::EditorWindowState;
 
+#[derive(PartialEq)]
+pub enum MenuBarWindow{
+    File,
+    Edit,
+    About,
+    NoMenuBar
+}
+
 /// An editor window type
 pub trait EditorWindow: 'static {
     type State: Default + Any + Send + Sync;
 
     const NAME: &'static str;
     const DEFAULT_SIZE: (f32, f32) = (0.0, 0.0);
+    const MENU_BAR : MenuBarWindow = MenuBarWindow::NoMenuBar;
 
     fn ui(world: &mut World, cx: EditorWindowContext, ui: &mut egui::Ui);
     /// Ui shown in the `Open Window` menu item. By default opens the window as a floating window.

@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext};
+use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::egui::{self, RichText};
 
 const DEFAULT_FILENAME: &str = "scene.scn.ron";
@@ -17,6 +17,7 @@ pub struct SceneWindow;
 
 impl EditorWindow for SceneWindow {
     type State = SceneWindowState;
+    const MENU_BAR : MenuBarWindow = MenuBarWindow::File;
     const NAME: &'static str = "Scenes";
 
     fn ui(world: &mut World, mut cx: EditorWindowContext, ui: &mut egui::Ui) {
@@ -25,7 +26,7 @@ impl EditorWindow for SceneWindow {
         ui.horizontal(|ui| {
             let res = egui::TextEdit::singleline(&mut state.filename)
                 .hint_text(DEFAULT_FILENAME)
-                .desired_width(120.0)
+                .desired_width(200.0)
                 .show(ui);
 
             if res.response.changed() {

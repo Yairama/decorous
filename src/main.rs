@@ -10,7 +10,13 @@ fn main() {
     App::new()
         .insert_resource(ClearColor(Color::rgb(0.0, 0.0, 0.0)))
         .insert_resource(Msaa::Sample4)
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(WindowPlugin{
+            primary_window: Some(Window {
+                title: "Decorous".into(),
+                ..default()
+            }),
+            ..default()
+        }))
         .add_plugin(EditorPlugin::new())
         .add_plugin(FrameTimeDiagnosticsPlugin)
         .add_plugin(EntityCountDiagnosticsPlugin)

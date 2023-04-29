@@ -4,7 +4,7 @@ use bevy::{
     render::{camera::CameraProjection, view::RenderLayers},
 };
 
-use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext};
+use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::{bevy_inspector::hierarchy::SelectedEntities, egui};
 use egui_gizmo::GizmoMode;
 
@@ -31,6 +31,7 @@ pub struct GizmoWindow;
 
 impl EditorWindow for GizmoWindow {
     type State = GizmoState;
+    const MENU_BAR : MenuBarWindow = MenuBarWindow::Edit;
 
     const NAME: &'static str = "Gizmos";
 

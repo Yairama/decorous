@@ -73,9 +73,8 @@ impl Plugin for EditorPlugin {
         let window = match self.window {
             EditorWindowPlacement::New(ref window) => {
                 let mut window = window.clone();
-                if window.title == "Bevy App" {
-                    window.title = "bevy_editor_pls".into();
-                }
+                window.title = "Decorous".into();
+                
                 let entity = app.world.spawn(window);
                 WindowRef::Entity(entity.id())
             }
@@ -103,6 +102,7 @@ impl Plugin for EditorPlugin {
             use crate::ui::ui_windows::renderer::RendererWindow;
             use crate::ui::ui_windows::resources::ResourcesWindow;
             use crate::ui::ui_windows::scenes::SceneWindow;
+            use crate::ui::ui_windows::new_project::NewProject;
 
             app.add_editor_window::<HierarchyWindow>();
             app.add_editor_window::<AssetsWindow>();
@@ -116,6 +116,7 @@ impl Plugin for EditorPlugin {
             app.add_editor_window::<SceneWindow>();
             app.add_editor_window::<GizmoWindow>();
             app.add_editor_window::<controls::ControlsWindow>();
+            app.add_editor_window::<NewProject>();
 
             app.add_plugin(bevy::pbr::wireframe::WireframePlugin);
 
@@ -125,7 +126,7 @@ impl Plugin for EditorPlugin {
             let mut internal_state = app.world.resource_mut::<editor::EditorInternalState>();
 
             let [game, _inspector] =
-                internal_state.split_right::<InspectorWindow>(egui_dock::NodeIndex::root(), 0.75);
+                internal_state.split_right::<InspectorWindow>(egui_dock::NodeIndex::root(), 0.80);
             let [game, _hierarchy] = internal_state.split_left::<HierarchyWindow>(game, 0.2);
             let [_game, _bottom] = internal_state.split_many(
                 game,
