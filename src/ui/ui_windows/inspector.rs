@@ -31,8 +31,8 @@ impl Default for InspectorState {
 pub struct InspectorWindow;
 impl EditorWindow for InspectorWindow {
     type State = InspectorState;
-    const MENU_BAR : MenuBarWindow = MenuBarWindow::Edit;
     const NAME: &'static str = "Inspector";
+    const MENU_BAR : MenuBarWindow = MenuBarWindow::Edit;
 
     fn ui(world: &mut World, cx: EditorWindowContext, ui: &mut egui::Ui) {
         let type_registry = world.resource::<AppTypeRegistry>().0.clone();

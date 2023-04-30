@@ -5,6 +5,7 @@ use bevy::pbr::wireframe::Wireframe;
 use bevy::prelude::*;
 use bevy::reflect::TypeRegistryInternal;
 use bevy::render::{Extract, RenderApp};
+use bevy::render::camera::ScalingMode;
 use bevy_inspector_egui::bevy_inspector::guess_entity_name;
 use bevy_inspector_egui::bevy_inspector::hierarchy::SelectedEntities;
 use bevy_inspector_egui::egui::{self, ScrollArea};
@@ -13,6 +14,8 @@ use crate::ui::ui_core::{
     editor_window::{EditorWindow, EditorWindowContext},
     Editor,
 };
+use crate::ui::ui_file_loader::files::{DxfEntitiesManager, DxfFile, TopographyMesh};
+use crate::ui::ui_windows::add::AddItem;
 // use bevy_mod_picking::backends::egui::EguiPointer;
 // use bevy_mod_picking::prelude::{IsPointerEvent, PointerClick, PointerButton};
 
@@ -29,6 +32,8 @@ impl EditorWindow for HierarchyWindow {
     const NAME: &'static str = "Hierarchy";
 
     fn ui(world: &mut World, mut cx: EditorWindowContext, ui: &mut egui::Ui) {
+
+
         let (hierarchy_state, inspector_state, add_state) =
             match cx.state_mut_triplet::<HierarchyWindow, InspectorWindow, AddWindow>() {
                 Some((a, b, c)) => (a, b, Some(c)),
@@ -39,6 +44,8 @@ impl EditorWindow for HierarchyWindow {
                     (a, b, None)
                 }
             };
+
+        hierarchy_menu_bar(ui, world);
 
         ScrollArea::vertical()
             .auto_shrink([false, false])
@@ -56,7 +63,11 @@ impl EditorWindow for HierarchyWindow {
                 if new_selected {
                     inspector_state.selected = InspectorSelection::Entities;
                 }
+
+
             });
+
+
     }
 
     fn app_setup(app: &mut bevy::prelude::App) {
@@ -67,6 +78,87 @@ impl EditorWindow for HierarchyWindow {
         app.sub_app_mut(RenderApp)
             .add_system(extract_wireframe_for_selected.in_schedule(ExtractSchedule));
     }
+}
+
+fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World,){
+    ui.separator();
+
+    egui::menu::bar(ui, |ui| {
+
+        ui.separator();
+
+        egui::menu::menu_button(ui, "+", |ui| {
+            let response_topography = ui.menu_button("Topography", |ui|{
+
+                ui.menu_button("Poly line", |ui|{
+                    if ui.button("DXF").clicked() {
+                        // TODO
+                    }
+                });
+
+                ui.menu_button("Mesh", |ui|{
+                    if ui.button("DXF").clicked() {
+
+                        if let Some(path) = rfd::FileDialog::new().add_filter("CAD files (dxf)", &["dxf"]).pick_file() {
+
+                            let dxf = DxfFile{
+                                path: Some(path.display().to_string()).unwrap()
+                            };
+
+                            let _points: Vec<[f64;3]> = dxf.get_points();
+                            let (topography_mesh, topography) = TopographyMesh::from_points(_points);
+
+
+                            let mut meshes = world.get_resource_mut::<Assets<Mesh>>().unwrap();
+                            let mesh = meshes.add(topography_mesh);
+
+                            let mut materials = world
+                                .get_resource_mut::<Assets<StandardMaterial>>()
+                                .unwrap();
+                            let material = materials.add(Color::rgb(0.3, 0.5, 0.3).into());
+
+                            world.spawn((PbrBundle {
+                                mesh,
+                                material,
+                                transform: Transform::from_xyz(0.,0.,0.),
+                                ..Default::default()
+                            }, topography, dxf));
+
+                            ui.close_menu();
+                        }
+
+                    }
+
+                    if ui.button("CSV").clicked() {
+                        // TODO
+                    }
+                });
+
+            });
+
+            if ui.button("Drills").clicked() {
+                // TODO
+            }
+
+            ui.menu_button("3D Models", |ui|{
+                if ui.button("OBJ").clicked(){
+                    // TODO
+                }
+                if ui.button("gLTF").clicked(){
+                    // TODO
+                }
+            });
+        });
+
+        ui.separator();
+
+        egui::menu::menu_button(ui, "↻", |ui|{
+
+        });
+
+    });
+
+    ui.separator();
 }
 
 fn clear_removed_entites(mut editor: ResMut<Editor>, entities: &Entities) {

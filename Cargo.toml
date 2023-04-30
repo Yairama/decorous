@@ -30,3 +30,4 @@ egui = "0.21.0"
 egui-gizmo = "0.10.0"
 bevy_framepace = "0.12.1"
 bevy_mod_debugdump = "0.7.0"
+

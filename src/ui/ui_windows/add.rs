@@ -72,8 +72,8 @@ pub struct AddWindow;
 
 impl EditorWindow for AddWindow {
     type State = AddWindowState;
-    const MENU_BAR : MenuBarWindow = MenuBarWindow::Edit;
     const NAME: &'static str = "Add";
+    const MENU_BAR : MenuBarWindow = MenuBarWindow::Edit;
 
     fn ui(world: &mut World, cx: EditorWindowContext, ui: &mut egui::Ui) {
         add_ui_button(world, ui, cx);

@@ -91,13 +91,13 @@ pub fn ui_example_system(
                         let drawing = Drawing::load_file(&path).unwrap();
                         for e in drawing.entities() {
                             match e.specific {
-                                // EntityType::Line(ref _line) => {
-                                //     let p1 = _line.p1.clone();
-                                //     _points.push([p1.x, p1.y, p1.z]);
+                                EntityType::Line(ref _line) => {
+                                    let p1 = _line.p1.clone();
+                                    _points.push([p1.x, p1.y, p1.z]);
 
-                                //     let p2 = _line.p2.clone();
-                                //     _points.push([p2.x, p2.y, p2.z]);
-                                // },
+                                    let p2 = _line.p2.clone();
+                                    _points.push([p2.x, p2.y, p2.z]);
+                                },
                                 EntityType::LwPolyline(ref _lw_polyline) => {
                                     let vertices = &_lw_polyline.vertices;
                                     let z = _lw_polyline.elevation;
