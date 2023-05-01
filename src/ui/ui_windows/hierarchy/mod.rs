@@ -14,8 +14,10 @@ use crate::ui::ui_core::{
     editor_window::{EditorWindow, EditorWindowContext},
     Editor,
 };
-use crate::ui::ui_file_loader::files::{DxfEntitiesManager, DxfFile, TopographyMesh};
+use crate::ui::ui_file_loader::files::{DxfEntitiesManager, DxfFile, FileProperties, TopographyMesh};
 use crate::ui::ui_windows::add::AddItem;
+use crate::ui::ui_windows::load_drills::LoadDrills;
+use crate::ui::ui_windows::new_project::NewProject;
 // use bevy_mod_picking::backends::egui::EguiPointer;
 // use bevy_mod_picking::prelude::{IsPointerEvent, PointerClick, PointerButton};
 
@@ -33,6 +35,7 @@ impl EditorWindow for HierarchyWindow {
 
     fn ui(world: &mut World, mut cx: EditorWindowContext, ui: &mut egui::Ui) {
 
+        hierarchy_menu_bar(ui, world, &mut cx);
 
         let (hierarchy_state, inspector_state, add_state) =
             match cx.state_mut_triplet::<HierarchyWindow, InspectorWindow, AddWindow>() {
@@ -45,7 +48,7 @@ impl EditorWindow for HierarchyWindow {
                 }
             };
 
-        hierarchy_menu_bar(ui, world);
+
 
         ScrollArea::vertical()
             .auto_shrink([false, false])
@@ -80,7 +83,7 @@ impl EditorWindow for HierarchyWindow {
     }
 }
 
-fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World,){
+fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World, cx: &mut EditorWindowContext){
     ui.separator();
 
     egui::menu::bar(ui, |ui| {
@@ -122,11 +125,10 @@ fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World,){
                                 material,
                                 transform: Transform::from_xyz(0.,0.,0.),
                                 ..Default::default()
-                            }, topography, dxf));
+                            }, topography, dxf.clone(), Name::new(dxf.name().unwrap())));
 
                             ui.close_menu();
                         }
-
                     }
 
                     if ui.button("CSV").clicked() {
@@ -137,6 +139,9 @@ fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World,){
             });
 
             if ui.button("Drills").clicked() {
+
+                cx.open_floating_window::<LoadDrills>();
+                ui.close_menu();
                 // TODO
             }
 

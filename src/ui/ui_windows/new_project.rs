@@ -12,15 +12,13 @@ impl EditorWindow for NewProject {
 
     type State = ();
     const MENU_BAR : MenuBarWindow = MenuBarWindow::File;
+    const DEFAULT_SIZE: (f32, f32) = (500.0, 500.0);
     const NAME: &'static str = "New Project";
 
     fn ui(world: &mut World, mut cx: EditorWindowContext, ui: &mut egui::Ui){
         
         ui.horizontal(|ui|{
             ui.label("text");
-
-            
-
 
         });
 

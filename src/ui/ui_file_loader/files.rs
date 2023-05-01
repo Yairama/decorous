@@ -1,4 +1,4 @@
-
+use std::path::Path;
 use bevy::prelude::*;
 use bevy::render::mesh::{PrimitiveTopology};
 use delaunator::{Point, triangulate};
@@ -9,11 +9,22 @@ pub trait FileProperties{
 
     fn path(&self) -> String;
 
-    fn name(&self) -> String {
-        let path = self.path();
-        let (_, name) = path.rsplit_once("\\").unwrap();
-        format!("{}", name)
+    fn name_with_extension(&self) -> Option<String> {
+        let ruta = self.path().clone().to_string();
+        let path = Path::new(ruta.as_str());
+        path.file_name()
+            .and_then(|name| name.to_str())
+            .map(|name1| name1.to_string())
     }
+
+    fn name(&self) -> Option<String> {
+        let ruta = self.path().clone().to_string();
+        let path = Path::new(ruta.as_str());
+        path.file_stem()
+            .and_then(|stem| stem.to_str())
+            .map(|nombre| nombre.to_string())
+    }
+
 
 }
 
@@ -57,7 +68,7 @@ pub trait DxfEntitiesManager{
     }
 }
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub struct DxfFile{
     pub path: String
 }
@@ -140,9 +151,52 @@ impl TopographyMesh {
 }
 
 
+#[derive(Component)]
+pub struct AssayFile{
+    pub path: String
+}
 
+impl FileProperties for AssayFile{
+    fn path(&self) -> String {
+        self.path.clone()
+    }
+}
 
+#[derive(Component)]
+pub struct HeaderFile{
+    pub path: String
+}
 
+impl FileProperties for HeaderFile{
+    fn path(&self) -> String {
+        self.path.clone()
+    }
+}
+
+#[derive(Component)]
+pub struct LithographyFile{
+    pub path: String
+}
+
+impl FileProperties for LithographyFile{
+    fn path(&self) -> String {
+        self.path.clone()
+    }
+}
+
+#[derive(Component)]
+pub struct SurveyFile{
+    pub path: String
+}
+
+impl FileProperties for SurveyFile{
+    fn path(&self) -> String {
+        self.path.clone()
+    }
+}
+
+#[derive(Component)]
+pub struct DrillHole;
 
 
 
