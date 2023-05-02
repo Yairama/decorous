@@ -43,7 +43,7 @@ impl EditorWindow for LoadDrills {
 
             ui.horizontal(|ui|{
                 egui::TextEdit::singleline(&mut state.assays)
-                    .hint_text("assay.csv")
+                    .hint_text("HOLE-ID, FROM, TO, AU, CU")
                     .show(ui);
 
                 ui.checkbox( &mut state.assays_headers, "Has headers");
@@ -57,7 +57,7 @@ impl EditorWindow for LoadDrills {
 
             ui.horizontal(|ui|{
                 egui::TextEdit::singleline(&mut state.header)
-                    .hint_text("header.csv")
+                    .hint_text("HOLE-ID, X, Y, Z, LENGTH")
                     .show(ui);
 
                 ui.checkbox( &mut state.header_headers, "Has headers");
@@ -71,7 +71,7 @@ impl EditorWindow for LoadDrills {
 
             ui.horizontal(|ui|{
                 egui::TextEdit::singleline(&mut state.lithography)
-                    .hint_text("lithography.csv")
+                    .hint_text("HOLE-ID, FROM, TO, ROCK")
                     .show(ui);
 
                 ui.checkbox( &mut state.lithography_headers, "Has headers");
@@ -85,7 +85,7 @@ impl EditorWindow for LoadDrills {
 
             ui.horizontal(|ui|{
                 egui::TextEdit::singleline(&mut state.survey)
-                    .hint_text("survey.csv")
+                    .hint_text("HOLE-ID, FROM, TO, AZIMUTH, DIP")
                     .show(ui);
 
                 ui.checkbox( &mut state.survey_headers, "Has headers");
