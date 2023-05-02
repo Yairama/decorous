@@ -123,7 +123,6 @@ fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World, cx: &mut EditorW
                             world.spawn((PbrBundle {
                                 mesh,
                                 material,
-                                transform: Transform::from_xyz(0.,0.,0.),
                                 ..Default::default()
                             }, topography, dxf.clone(), Name::new(dxf.name().unwrap())));
 
@@ -152,7 +151,6 @@ fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World, cx: &mut EditorW
                             world.spawn((PbrBundle {
                                 mesh,
                                 material,
-                                transform: Transform::from_xyz(0.,0.,0.),
                                 ..Default::default()
                             }, topography, csv.clone(), Name::new(csv.name().unwrap())));
 

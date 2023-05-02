@@ -5,7 +5,7 @@ use bevy::prelude::*;
 use delaunator::{Point, triangulate};
 use bevy::render::mesh::{PrimitiveTopology};
 use csv::ReaderBuilder;
-use crate::ui::ui_file_loader::files::CsvFile;
+use crate::ui::ui_file_loader::files::{CsvFile, DrillHole};
 
 #[derive(Component)]
 pub struct TopographyMesh{
@@ -121,6 +121,11 @@ pub struct DrillHolesMesh{
 }
 
 impl DrillHolesMesh {
+    pub fn from_csv(drill_holes: DrillHole){
+        let assay = &drill_holes.files[0];
+        let survey = &drill_holes.files[3];
+        //TODO
 
+    }
 }
 

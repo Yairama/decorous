@@ -142,7 +142,7 @@ impl CsvFile {
 /// 3: Survey
 #[derive(Component)]
 pub struct DrillHole{
-  files: [CsvFile;4],
+    pub files: [CsvFile;4],
 }
 
 
