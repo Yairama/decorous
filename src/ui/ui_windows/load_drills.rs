@@ -1,20 +1,28 @@
 use std::fmt::Error;
 use std::fs;
 use bevy::{
-    prelude::{AppTypeRegistry, ReflectResource, World},
+    prelude::*,
     reflect::TypeRegistryInternal,
 };
+use bevy::app::AppLabel;
+use bevy::prelude::{Entity, With};
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::egui;
 use egui::{Button, RichText, widgets};
-use crate::ui::ui_file_loader::files::{AssayFile, FileProperties, HeaderFile, LithographyFile, SurveyFile};
+use crate::custom_meshes::components::TopographyMesh;
+
 
 #[derive(Default)]
 pub struct LoadDrillsWindowState{
     assays: String,
+    assays_headers: bool,
     header: String,
+    header_headers: bool,
     lithography: String,
+    lithography_headers: bool,
     survey: String,
+    survey_headers: bool,
+    topography_mesh: String,
     load_files_result: Option<Result<(), Box<dyn std::error::Error + Send + Sync>>>,
 }
 
@@ -34,54 +42,80 @@ impl EditorWindow for LoadDrills {
         ui.vertical(|ui|{
 
             ui.horizontal(|ui|{
-                let response_assay = egui::TextEdit::singleline(&mut state.assays)
+                egui::TextEdit::singleline(&mut state.assays)
                     .hint_text("assay.csv")
                     .show(ui);
 
+                ui.checkbox( &mut state.assays_headers, "Has headers");
+
                 if ui.button("Load Assay").clicked() {
-                    if let Some(path) = rfd::FileDialog::new().add_filter("Assay", &["csv","txt"]).pick_file() {
+                    if let Some(path) = rfd::FileDialog::new().add_filter("Assay", &["csv"]).pick_file() {
                         state.assays = path.display().to_string();
                     }
                 }
             });
 
             ui.horizontal(|ui|{
-                let response_header = egui::TextEdit::singleline(&mut state.header)
+                egui::TextEdit::singleline(&mut state.header)
                     .hint_text("header.csv")
                     .show(ui);
 
+                ui.checkbox( &mut state.header_headers, "Has headers");
+
                 if ui.button("Load Header").clicked() {
-                    if let Some(path) = rfd::FileDialog::new().add_filter("Header", &["csv","txt"]).pick_file() {
+                    if let Some(path) = rfd::FileDialog::new().add_filter("Header", &["csv"]).pick_file() {
                         state.header = path.display().to_string();
                     }
                 }
             });
 
             ui.horizontal(|ui|{
-                let response_lithography = egui::TextEdit::singleline(&mut state.lithography)
+                egui::TextEdit::singleline(&mut state.lithography)
                     .hint_text("lithography.csv")
                     .show(ui);
 
+                ui.checkbox( &mut state.lithography_headers, "Has headers");
+
                 if ui.button("Load Lithography").clicked() {
-                    if let Some(path) = rfd::FileDialog::new().add_filter("Lithography", &["csv","txt"]).pick_file() {
+                    if let Some(path) = rfd::FileDialog::new().add_filter("Lithography", &["csv"]).pick_file() {
                         state.lithography = path.display().to_string();
                     }
                 }
             });
 
             ui.horizontal(|ui|{
-                let response_survey = egui::TextEdit::singleline(&mut state.survey)
+                egui::TextEdit::singleline(&mut state.survey)
                     .hint_text("survey.csv")
                     .show(ui);
 
+                ui.checkbox( &mut state.survey_headers, "Has headers");
+
                 if ui.button("Load Survey").clicked() {
-                    if let Some(path) = rfd::FileDialog::new().add_filter("Survey", &["csv","txt"]).pick_file() {
+                    if let Some(path) = rfd::FileDialog::new().add_filter("Survey", &["csv"]).pick_file() {
                         state.survey = path.display().to_string();
                     }
                 }
             });
+            ui.label("Select Topography that will be linked to the drill holes: ");
+            ui.horizontal(|ui|{
+                let mut filtered_query = world
+                    .query_filtered::<Entity, (With<Name>, With<TopographyMesh>)>();
+
+                for entity in filtered_query.iter(world){
+                    let name = world.get::<Name>(entity).unwrap().to_string();
+                    let selected = state.topography_mesh==name;
+                    if ui.selectable_label(selected,&name).clicked(){
+                        state.topography_mesh = name;
+                    }
+                }
+
+            });
 
             let enter_pressed = ui.input(|input| input.key_pressed(egui::Key::Enter));
+
+            if state.topography_mesh == ""{
+                ui.label(RichText::new("No topography selected").color(egui::Color32::RED));
+            }
 
             ui.separator();
 
@@ -115,12 +149,10 @@ fn load_files(
     let lithography_contents = fs::read_to_string(&state.lithography)?;
     let survey_contents = fs::read_to_string(&state.survey)?;
 
-    let assay_component = AssayFile{path: String::from(&state.assays)};
-    let header_component = HeaderFile{path: String::from(&state.header)};
-    let lithography_component = LithographyFile{path: String::from(&state.lithography)};
-    let survey_component = SurveyFile{path: String::from(&state.survey)};
-
-    println!("{:?}", assay_component.name_with_extension());
+    // let assay_component = AssayFile{path: String::from(&state.assays)};
+    // let header_component = HeaderFile{path: String::from(&state.header)};
+    // let lithography_component = LithographyFile{path: String::from(&state.lithography)};
+    // let survey_component = SurveyFile{path: String::from(&state.survey)};
 
     //TODO
 

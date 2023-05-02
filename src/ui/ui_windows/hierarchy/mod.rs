@@ -9,12 +9,13 @@ use bevy::render::camera::ScalingMode;
 use bevy_inspector_egui::bevy_inspector::guess_entity_name;
 use bevy_inspector_egui::bevy_inspector::hierarchy::SelectedEntities;
 use bevy_inspector_egui::egui::{self, ScrollArea};
+use crate::custom_meshes::components::TopographyMesh;
 
 use crate::ui::ui_core::{
     editor_window::{EditorWindow, EditorWindowContext},
     Editor,
 };
-use crate::ui::ui_file_loader::files::{DxfEntitiesManager, DxfFile, FileProperties, TopographyMesh};
+use crate::ui::ui_file_loader::files::{CsvFile, DxfFile, FileProperties};
 use crate::ui::ui_windows::add::AddItem;
 use crate::ui::ui_windows::load_drills::LoadDrills;
 use crate::ui::ui_windows::new_project::NewProject;
@@ -111,7 +112,6 @@ fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World, cx: &mut EditorW
                             let _points: Vec<[f64;3]> = dxf.get_points();
                             let (topography_mesh, topography) = TopographyMesh::from_points(_points);
 
-
                             let mut meshes = world.get_resource_mut::<Assets<Mesh>>().unwrap();
                             let mesh = meshes.add(topography_mesh);
 
@@ -132,6 +132,36 @@ fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World, cx: &mut EditorW
                     }
 
                     if ui.button("CSV").clicked() {
+
+                        if let Some(path) = rfd::FileDialog::new().add_filter("CAD files (csv)", &["csv"]).pick_file() {
+                            let csv = CsvFile{
+                                path: Some(path.display().to_string()).unwrap(),
+                                header: true,
+                                sep: b',',
+                            };
+                            let (topography_mesh, topography) = TopographyMesh::from_csv(&csv).unwrap();
+
+                            let mut meshes = world.get_resource_mut::<Assets<Mesh>>().unwrap();
+                            let mesh = meshes.add(topography_mesh);
+
+                            let mut materials = world
+                                .get_resource_mut::<Assets<StandardMaterial>>()
+                                .unwrap();
+                            let material = materials.add(Color::rgb(0.3, 0.5, 0.3).into());
+
+                            world.spawn((PbrBundle {
+                                mesh,
+                                material,
+                                transform: Transform::from_xyz(0.,0.,0.),
+                                ..Default::default()
+                            }, topography, csv.clone(), Name::new(csv.name().unwrap())));
+
+                            ui.close_menu();
+
+
+
+                        }
+
                         // TODO
                     }
                 });
@@ -165,6 +195,7 @@ fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World, cx: &mut EditorW
 
     ui.separator();
 }
+
 
 fn clear_removed_entites(mut editor: ResMut<Editor>, entities: &Entities) {
     let state = editor.window_state_mut::<HierarchyWindow>().unwrap();

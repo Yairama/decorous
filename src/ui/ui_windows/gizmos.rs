@@ -6,7 +6,8 @@ use bevy::{
 
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::{bevy_inspector::hierarchy::SelectedEntities, egui};
-use egui_gizmo::GizmoMode;
+use egui::Color32;
+use egui_gizmo::{GizmoMode, GizmoVisuals};
 
 use super::{
     cameras::{ActiveEditorCamera, CameraWindow, EditorCamera, EDITOR_RENDER_LAYER},
@@ -192,6 +193,33 @@ fn draw_gizmo(
         return;
     }
 
+    let mut stroke_width = 4.0;
+    let mut gizmo_size = 75.0;
+    let mut custom_highlight_color = false;
+    let mut highlight_color = Color32::GOLD;
+    let mut x_color = Color32::from_rgb(255, 0, 148);
+    let mut y_color = Color32::from_rgb(148, 255, 0);
+    let mut z_color = Color32::from_rgb(0, 148, 255);
+    let mut s_color = Color32::WHITE;
+    let mut inactive_alpha = 0.5;
+    let mut highlight_alpha = 1.0;
+
+    let visuals = GizmoVisuals {
+        stroke_width,
+        x_color,
+        y_color,
+        z_color,
+        s_color,
+        inactive_alpha,
+        highlight_alpha,
+        highlight_color: if custom_highlight_color {
+            Some(highlight_color)
+        } else {
+            None
+        },
+        gizmo_size,
+    };
+
     for selected in selected_entities.iter() {
         let Some(transform) = world.get::<Transform>(selected) else { continue };
         let model_matrix = transform.compute_matrix();
@@ -201,7 +229,7 @@ fn draw_gizmo(
                     .view_matrix(view_matrix.to_cols_array_2d())
                     .projection_matrix(projection_matrix.to_cols_array_2d())
                     .orientation(egui_gizmo::GizmoOrientation::Local)
-                    .mode(gizmo_mode)
+                    .mode(gizmo_mode).visuals(visuals)
                     .interact(ui)
                 else { continue };
 

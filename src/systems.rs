@@ -7,13 +7,13 @@ pub fn setup_system(
     mut standard_materials: ResMut<Assets<StandardMaterial>>,
 ) {
 
-    commands.spawn(InfiniteGridBundle {
+    commands.spawn((InfiniteGridBundle {
         grid: InfiniteGrid {
             // shadow_color: None,
             ..Default::default()
         },
         ..Default::default()
-    });
+    }, Name::new("Grid")));
 
     commands
         .spawn(Camera3dBundle {

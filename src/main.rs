@@ -3,6 +3,9 @@ use bevy_infinite_grid::InfiniteGridPlugin;
 
 mod ui;
 mod systems;
+mod custom_meshes;
+
+use custom_meshes::*;
 use systems::*;
 use ui::ui_setup::EditorPlugin;
 
