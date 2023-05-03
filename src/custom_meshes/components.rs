@@ -3,10 +3,11 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::ops::Sub;
 use bevy::prelude::*;
+use bevy::reflect::erased_serde::__private::serde::__private::de::Content::String;
 use delaunator::{Point, triangulate};
 use bevy::render::mesh::{PrimitiveTopology};
 use csv::ReaderBuilder;
-use polars::prelude::DataFrameJoinOps;
+use polars::prelude::*;
 use crate::ui::ui_file_loader::files::{CsvFile};
 
 #[derive(Component)]
@@ -147,13 +148,36 @@ impl DrillHolesMesh {
         let z_header_colum = df_header.column("z").unwrap().sub(drill_holes.offset_z.unwrap());
         df_header = (*df_header.with_column(z_header_colum).unwrap()).clone();
 
+        let header_id_drills = df_header.column("hole-id").unwrap().unique().unwrap();
 
+        let df_drills_orientation = df_header.left_join(&df_survey, ["hole-id"], ["hole-id"]).unwrap();
 
+        let mut iters_drills = df_drills_orientation
+            .columns(["hole-id","x","y","z","from","to","azimuth","dip"]).unwrap()
+            .iter().map(|s| s.iter()).collect::<Vec<_>>();
 
-        // let id_drills = df_header.column("hole-id").unwrap().unique().unwrap();
+        let mut iters_assay = df_assay
+            .columns(["hole-id","from","to","au","cu"]).unwrap()
+            .iter().map(|s| s.iter()).collect::<Vec<_>>();
 
-        // let df_drills_orientation = df_header.left_join(&df_survey, "hole_id", "hole_id").unwrap();
+        for _row_drills in 0..df_drills_orientation.height(){
+            let hole_id = iters_drills[0].next().unwrap().to_string().replace("\"", "");
+            let x = iters_drills[1].next().unwrap().try_extract::<f32>().unwrap();
+            let y = iters_drills[2].next().unwrap().try_extract::<f32>().unwrap();
+            let z = iters_drills[3].next().unwrap().try_extract::<f32>().unwrap();
+            let survey_from = iters_drills[4].next().unwrap().try_extract::<f32>().unwrap();
+            let survey_to = iters_drills[5].next().unwrap().try_extract::<f32>().unwrap();
+            let azimuth = iters_drills[6].next().unwrap().try_extract::<f32>().unwrap();
+            let dip = iters_drills[7].next().unwrap().try_extract::<f32>().unwrap();
 
+            for _row_assay in 0..df_assay.height(){
+
+                let mask = df_assay.column("hole-id").unwrap();
+                // let filtered_df = df_assay.filter(&mask);
+                let a = col("a");
+            }
+
+        }
 
         //TODO
 
