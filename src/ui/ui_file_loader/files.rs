@@ -102,7 +102,7 @@ impl CsvFile {
         Ok(file)
     }
 
-    fn read_csv_file(&self) -> Result<impl Iterator<Item = String>, Box<dyn Error>> {
+    pub fn read_csv_file(&self) -> Result<impl Iterator<Item = String>, Box<dyn Error>> {
         let file = File::open(self.path.clone())?;
         let reader = BufReader::new(file);
         let lines = reader.lines().map(|line| line.unwrap());
@@ -110,7 +110,7 @@ impl CsvFile {
     }
 
 
-    fn csv_to_lowercase_dataframe(&self) -> PolarsResult<DataFrame> {
+    pub fn dataframe(&self) -> PolarsResult<DataFrame> {
         let file = File::open(self.path.clone())?;
 
         let mut df = CsvReader::new(file)
@@ -135,14 +135,6 @@ impl CsvFile {
 
 }
 
-/// Saves the files
-/// 0: Assay
-/// 1: Header
-/// 2: Lithography
-/// 3: Survey
-#[derive(Component)]
-pub struct DrillHole{
-    pub files: [CsvFile;4],
-}
+
 
 

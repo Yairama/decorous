@@ -1,4 +1,4 @@
-use std::fmt::Error;
+use std::error::Error;
 use std::fs;
 use bevy::{
     prelude::*,
@@ -9,7 +9,8 @@ use bevy::prelude::{Entity, With};
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::egui;
 use egui::{Button, RichText, widgets};
-use crate::custom_meshes::components::TopographyMesh;
+use crate::custom_meshes::components::{DrillHolesMesh, TopographyMesh};
+use crate::ui::ui_file_loader::files::CsvFile;
 
 
 #[derive(Default)]
@@ -23,7 +24,7 @@ pub struct LoadDrillsWindowState{
     survey: String,
     survey_headers: bool,
     topography_mesh: String,
-    load_files_result: Option<Result<(), Box<dyn std::error::Error + Send + Sync>>>,
+    load_files_result: Option<Result<(), Box<dyn Error + Send + Sync>>>,
 }
 
 pub struct LoadDrills;
@@ -139,15 +140,55 @@ impl EditorWindow for LoadDrills {
 }
 
 fn load_files(
-    world: &World,
+    world: &mut World,
     state: &mut LoadDrillsWindowState
-) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+) -> Result<(), Box<dyn Error + Send + Sync>> {
 
 
-    let assays_contents = fs::read_to_string(&state.assays)?;
-    let header_contents = fs::read_to_string(&state.header)?;
-    let lithography_contents = fs::read_to_string(&state.lithography)?;
-    let survey_contents = fs::read_to_string(&state.survey)?;
+    let assays_contents = CsvFile{
+        path: state.assays.to_string(),
+        header: state.assays_headers,
+        sep: b',',
+    };
+    let header_contents = CsvFile{
+        path: state.header.to_string(),
+        header: state.header_headers,
+        sep: b',',
+    };
+    let lithography_contents = CsvFile{
+        path: state.lithography.to_string(),
+        header: state.lithography_headers,
+        sep: b',',
+    };
+    let survey_contents = CsvFile{
+        path: state.survey.to_string(),
+        header: state.survey_headers,
+        sep: b',',
+    };
+
+    let mut drill_holes = DrillHolesMesh{
+        files: [assays_contents, header_contents, lithography_contents, survey_contents],
+        offset_x: None,
+        offset_y: None,
+        offset_z: None,
+    };
+
+    if state.topography_mesh!="" {
+
+        let mut filtered_query = world
+            .query_filtered::<Entity, (With<Name>, With<TopographyMesh>)>();
+
+        for entity in filtered_query.iter(world){
+            let name = world.get::<Name>(entity).unwrap().to_string();
+            if name==state.topography_mesh{
+                let topography = world.get::<TopographyMesh>(entity).unwrap();
+                drill_holes.offset_x = Option::from(topography.offset_x as f32);
+                drill_holes.offset_y = Option::from(topography.offset_y as f32);
+                drill_holes.offset_z = Option::from(topography.offset_z as f32);
+            }
+        }
+
+    }
 
     // let assay_component = AssayFile{path: String::from(&state.assays)};
     // let header_component = HeaderFile{path: String::from(&state.header)};

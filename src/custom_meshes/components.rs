@@ -1,17 +1,19 @@
 use std::error::Error;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use std::ops::Sub;
 use bevy::prelude::*;
 use delaunator::{Point, triangulate};
 use bevy::render::mesh::{PrimitiveTopology};
 use csv::ReaderBuilder;
-use crate::ui::ui_file_loader::files::{CsvFile, DrillHole};
+use polars::prelude::DataFrameJoinOps;
+use crate::ui::ui_file_loader::files::{CsvFile};
 
 #[derive(Component)]
 pub struct TopographyMesh{
-    offset_x: f64,
-    offset_y: f64,
-    offset_z: f64,
+    pub offset_x: f64,
+    pub offset_y: f64,
+    pub offset_z: f64,
 }
 
 impl TopographyMesh {
@@ -113,17 +115,46 @@ impl TopographyMesh {
 
 }
 
+/// Saves the files
+/// 0: Assay
+/// 1: Header
+/// 2: Lithography
+/// 3: Survey
 #[derive(Component)]
 pub struct DrillHolesMesh{
-    offset_x: f64,
-    offset_y: f64,
-    offset_z: f64,
+    pub files: [CsvFile;4],
+    pub offset_x: Option<f32>,
+    pub offset_y: Option<f32>,
+    pub offset_z: Option<f32>,
 }
 
 impl DrillHolesMesh {
-    pub fn from_csv(drill_holes: DrillHole){
+    pub fn from_csv(drill_holes: DrillHolesMesh){
         let assay = &drill_holes.files[0];
+        let header = &drill_holes.files[1];
         let survey = &drill_holes.files[3];
+
+        let df_assay = assay.dataframe().unwrap();
+        let mut df_header = header.dataframe().unwrap();
+        let df_survey = survey.dataframe().unwrap();
+
+        let x_header_colum = df_header.column("x").unwrap().sub(drill_holes.offset_x.unwrap());
+        df_header = (*df_header.with_column(x_header_colum).unwrap()).clone();
+
+        let y_header_colum = df_header.column("y").unwrap().sub(drill_holes.offset_y.unwrap());
+        df_header = (*df_header.with_column(y_header_colum).unwrap()).clone();
+
+        let z_header_colum = df_header.column("z").unwrap().sub(drill_holes.offset_z.unwrap());
+        df_header = (*df_header.with_column(z_header_colum).unwrap()).clone();
+
+
+
+
+        // let id_drills = df_header.column("hole-id").unwrap().unique().unwrap();
+
+        // let df_drills_orientation = df_header.left_join(&df_survey, "hole_id", "hole_id").unwrap();
+
+
         //TODO
 
     }
