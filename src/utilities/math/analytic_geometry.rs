@@ -1,12 +1,13 @@
 
 use std::f64::consts::PI;
+use bevy::math::Vec3;
 
 pub fn interpolate_point_on_the_line(
     origin: [f32;3],
     azimuth: f32,
     dip: f32,
     distance: f32,
-) -> [f32;3] {
+) -> Vec3 {
 
     let azimuth_rad = azimuth * PI as f32/ 180.0;
     let dip_rad = dip * PI as f32/ 180.0;
@@ -19,5 +20,5 @@ pub fn interpolate_point_on_the_line(
     let y = origin[1] + distance * vector_y;
     let z = origin[2] + distance * vector_z;
 
-    [x, y, z]
+    Vec3::new(x, y, z)
 }

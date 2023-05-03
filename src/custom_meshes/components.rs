@@ -3,12 +3,15 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::ops::Sub;
 use bevy::prelude::*;
+use bevy::prelude::system_adapter::new;
 use bevy::reflect::erased_serde::__private::serde::__private::de::Content::String;
 use delaunator::{Point, triangulate};
 use bevy::render::mesh::{PrimitiveTopology};
 use csv::ReaderBuilder;
+use polars::export::arrow::array::equal;
 use polars::prelude::*;
 use crate::ui::ui_file_loader::files::{CsvFile};
+use crate::utilities::math::analytic_geometry;
 
 #[derive(Component)]
 pub struct TopographyMesh{
@@ -37,27 +40,18 @@ impl TopographyMesh {
 
     fn create_mesh(vec: Vec<[f64;3]>) -> Mesh{
         let points = vec.iter().map(|v| Point { x: v[0], y: v[1] }).collect::<Vec<Point>>();
-
-        let result = triangulate(&points);
-        let triangles = result.triangles;
-
-
         let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
-        let vector_values = vec.iter().map(|v| Vec3::new(v[0] as f32, v[2] as f32, v[1] as f32)).collect::<Vec<_>>();
-        mesh.insert_attribute(
-            Mesh::ATTRIBUTE_POSITION,
-            vector_values.clone(),
-        );
+        let result = triangulate(&points);
 
+        let triangles = result.triangles;
+        let vector_values = vec.iter().map(|v| Vec3::new(v[0] as f32, v[2] as f32, v[1] as f32)).collect::<Vec<_>>();
         let normals = Self::calculate_normals(&vector_values, &triangles);
 
-        // In this example, normals and UVs don't matter,
-        // so we just use the same value for all of them
+        mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, vec![[0., 0.]; vector_values.len()]);
+        mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, vector_values);
         mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
-        mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, vec![[0., 0.]; vec.len()]);
-        // A triangle using vertices 0, 2, and 1.
-        // Note: order matters. [0, 1, 2] will be flipped upside down, and you won't see it from behind!
-        mesh.set_indices(Some(bevy::render::mesh::Indices::U32(triangles.clone().into_iter().map(|i| i as u32).collect())));
+        mesh.set_indices(Some(bevy::render::mesh::Indices::U32(triangles.into_iter().map(|i| i as u32).collect())));
+
         mesh
     }
 
@@ -130,10 +124,11 @@ pub struct DrillHolesMesh{
 }
 
 impl DrillHolesMesh {
-    pub fn from_csv(drill_holes: DrillHolesMesh){
+    pub fn from_csv(drill_holes: DrillHolesMesh) -> Vec<Mesh>{
         let assay = &drill_holes.files[0];
         let header = &drill_holes.files[1];
         let survey = &drill_holes.files[3];
+        let mut result: Vec<Mesh> = Vec::new();
 
         let df_assay = assay.dataframe().unwrap();
         let mut df_header = header.dataframe().unwrap();
@@ -156,9 +151,7 @@ impl DrillHolesMesh {
             .columns(["hole-id","x","y","z","from","to","azimuth","dip"]).unwrap()
             .iter().map(|s| s.iter()).collect::<Vec<_>>();
 
-        let mut iters_assay = df_assay
-            .columns(["hole-id","from","to","au","cu"]).unwrap()
-            .iter().map(|s| s.iter()).collect::<Vec<_>>();
+
 
         for _row_drills in 0..df_drills_orientation.height(){
             let hole_id = iters_drills[0].next().unwrap().to_string().replace("\"", "");
@@ -170,17 +163,79 @@ impl DrillHolesMesh {
             let azimuth = iters_drills[6].next().unwrap().try_extract::<f32>().unwrap();
             let dip = iters_drills[7].next().unwrap().try_extract::<f32>().unwrap();
 
-            for _row_assay in 0..df_assay.height(){
+            let df_filtered_assays = df_assay.filter(&df_assay
+                .column("hole-id").unwrap().utf8().unwrap()
+                .contains_literal(&hole_id).unwrap()).unwrap();
 
-                let mask = df_assay.column("hole-id").unwrap();
-                // let filtered_df = df_assay.filter(&mask);
-                let a = col("a");
+            let mut iters_assay = df_filtered_assays
+                .columns(["hole-id","from","to","au","cu"]).unwrap()
+                .iter().map(|s| s.iter()).collect::<Vec<_>>();
+
+            for _row_assay in 0..df_filtered_assays.height(){
+
+                let _hole_id = iters_assay[0].next().unwrap().to_string().replace("\"", "");
+                let from = iters_assay[1].next().unwrap().try_extract::<f32>().unwrap();
+                let to = iters_assay[2].next().unwrap().try_extract::<f32>().unwrap();
+                let au = iters_assay[3].next().unwrap().try_extract::<f32>().unwrap();
+                let cu = iters_assay[4].next().unwrap().try_extract::<f32>().unwrap();
+
+                let from_coord = analytic_geometry::interpolate_point_on_the_line(
+                    [x,z,y],
+                    azimuth,
+                    dip,
+                    from
+                );
+
+                let to_coord = analytic_geometry::interpolate_point_on_the_line(
+                    [x,z,y],
+                    azimuth,
+                    dip,
+                    to
+                );
+
+                let mesh = Self::generate_triangular_prisma(
+                    from_coord,
+                    to_coord,
+                    5.0);
+                result.push(mesh);
+
             }
 
         }
 
         //TODO
-
+        result
     }
+
+    fn generate_triangular_prisma(
+        coord1: Vec3,
+        coord2: Vec3,
+        width: f32
+    ) -> Mesh {
+        let normal = (coord2 - coord1).normalize();
+        let up = if normal.dot(Vec3::Y) < 0.99 { Vec3::Y } else { Vec3::X };
+        let side = normal.cross(up).normalize() * (width / 2.0);
+
+        let a = coord1 + side;
+        let b = coord1 - side;
+        let c = coord2 - side;
+        let d = coord2 + side;
+
+        let vertices = vec![a, b, c, d];
+        let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
+
+        mesh.set_indices(Some(bevy::render::mesh::Indices::U32(vec![0, 1, 2, 0, 2, 3])));
+        mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, vertices.clone());
+
+        let normals = vec![normal; 4];
+        mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
+
+        mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, vec![[0., 0.]; vertices.len()]);
+
+        mesh
+    }
+
+
+
 }
 

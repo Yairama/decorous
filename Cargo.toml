@@ -15,7 +15,7 @@ bevy = {version="0.10", features=[
     "bevy_core_pipeline",
 ]}
 bevy_egui = "0.20"
-bevy_infinite_grid = { git = "https://github.com/PikminGuts92/bevy_infinite_grid", branch = "bevy-0.10" }
+bevy_infinite_grid = "0.7.0"
 rfd = "0.11.3"
 dxf = { git = "https://github.com/Yairama/dxf-rs", branch = "main" }
 delaunator = "1.0.2"
@@ -31,4 +31,4 @@ egui-gizmo = "0.10.0"
 bevy_framepace = "0.12.1"
 bevy_mod_debugdump = "0.7.0"
 csv = "1.2.1"
-polars = {version="0.28.0", features=["lazy"]}
+polars = {version="0.28.0", features=["lazy", "strings"]}

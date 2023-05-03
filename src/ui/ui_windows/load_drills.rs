@@ -177,7 +177,6 @@ fn load_files(
 
         let mut filtered_query = world
             .query_filtered::<Entity, (With<Name>, With<TopographyMesh>)>();
-
         for entity in filtered_query.iter(world){
             let name = world.get::<Name>(entity).unwrap().to_string();
             if name==state.topography_mesh{
@@ -187,13 +186,36 @@ fn load_files(
                 drill_holes.offset_z = Option::from(topography.offset_z as f32);
             }
         }
-
     }
 
-    // let assay_component = AssayFile{path: String::from(&state.assays)};
-    // let header_component = HeaderFile{path: String::from(&state.header)};
-    // let lithography_component = LithographyFile{path: String::from(&state.lithography)};
-    // let survey_component = SurveyFile{path: String::from(&state.survey)};
+    let drill_meshes = DrillHolesMesh::from_csv(drill_holes);
+
+    let mut count = 0;
+
+    for drill_mesh in drill_meshes{
+        count+=1;
+        if count<500{
+            let mut meshes = world.get_resource_mut::<Assets<Mesh>>().unwrap();
+            let mesh = meshes.add(drill_mesh);
+
+            let mut materials = world
+                .get_resource_mut::<Assets<StandardMaterial>>()
+                .unwrap();
+            let material = materials.add(
+                StandardMaterial{
+                    base_color: Color::rgb(0.3, 0.5, 0.3),
+                    cull_mode: None,
+                    ..Default::default()
+                }
+            );
+
+            world.spawn((PbrBundle {
+                mesh,
+                material,
+                ..Default::default()
+            }));
+        }
+    }
 
     //TODO
 

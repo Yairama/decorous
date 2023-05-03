@@ -729,7 +729,8 @@ dependencies = [
 [[package]]
 name = "bevy_infinite_grid"
 version = "0.7.0"
-source = "git+https://github.com/PikminGuts92/bevy_infinite_grid?branch=bevy-0.10#8c3a33d81febfc61469089b0d25c128c48b6cbd7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b4f499185ed730d2eafe6c6c37258b10116af2de645333372fc2c073a889e457"
 dependencies = [
  "bevy",
 ]
@@ -3730,9 +3731,9 @@ checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
 
 [[package]]
 name = "pkg-config"
-version = "0.3.26"
+version = "0.3.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6ac9a59f73473f1b8d852421e59e64809f025994837ef743615c6d0c5b305160"
+checksum = "26072860ba924cbfa98ea39c8c19b4dd6a4a25423dbdf219c1eca91aa0cf6964"
 
 [[package]]
 name = "planus"

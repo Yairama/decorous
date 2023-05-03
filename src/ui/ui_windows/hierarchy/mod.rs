@@ -6,6 +6,7 @@ use bevy::prelude::*;
 use bevy::reflect::TypeRegistryInternal;
 use bevy::render::{Extract, RenderApp};
 use bevy::render::camera::ScalingMode;
+use bevy::render::render_resource::Face;
 use bevy_inspector_egui::bevy_inspector::guess_entity_name;
 use bevy_inspector_egui::bevy_inspector::hierarchy::SelectedEntities;
 use bevy_inspector_egui::egui::{self, ScrollArea};
@@ -146,7 +147,13 @@ fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World, cx: &mut EditorW
                             let mut materials = world
                                 .get_resource_mut::<Assets<StandardMaterial>>()
                                 .unwrap();
-                            let material = materials.add(Color::rgb(0.3, 0.5, 0.3).into());
+                            let material = materials.add(
+                                StandardMaterial{
+                                    base_color: Color::rgb(0.3, 0.5, 0.3),
+                                    cull_mode: None,
+                                    ..Default::default()
+                                }
+                            );
 
                             world.spawn((PbrBundle {
                                 mesh,
