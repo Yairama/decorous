@@ -3,10 +3,12 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::ops::Sub;
 use bevy::prelude::*;
+use bevy::prelude::shape::Cylinder;
 use bevy::prelude::system_adapter::new;
 use bevy::reflect::erased_serde::__private::serde::__private::de::Content::String;
 use delaunator::{Point, triangulate};
 use bevy::render::mesh::{PrimitiveTopology};
+use bevy::render::render_resource::Face;
 use csv::ReaderBuilder;
 use polars::export::arrow::array::equal;
 use polars::prelude::*;
@@ -124,15 +126,29 @@ pub struct DrillHolesMesh{
 }
 
 impl DrillHolesMesh {
-    pub fn from_csv(drill_holes: DrillHolesMesh) -> Vec<Mesh>{
+    pub fn from_csv(drill_holes: DrillHolesMesh) -> (Vec<Mesh>,Vec<Vec3>, Vec<StandardMaterial>){
         let assay = &drill_holes.files[0];
         let header = &drill_holes.files[1];
         let survey = &drill_holes.files[3];
-        let mut result: Vec<Mesh> = Vec::new();
+
 
         let df_assay = assay.dataframe().unwrap();
         let mut df_header = header.dataframe().unwrap();
         let df_survey = survey.dataframe().unwrap();
+
+        let mut meshes_result: Vec<Mesh> = Vec::new();
+        let mut transforms_result: Vec<Vec3> = Vec::new();
+        let mut material_au_result: Vec<StandardMaterial> = Vec::new();
+
+        let p25_grade_au = df_assay.column("au").unwrap().f64().unwrap()
+            .quantile(0.25, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
+        let p75_grade_au = df_assay.column("au").unwrap().f64().unwrap()
+            .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
+        let p25_grade_cu = df_assay.column("cu").unwrap().f64().unwrap()
+            .quantile(0.25, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
+        let p75_grade_cu = df_assay.column("cu").unwrap().f64().unwrap()
+            .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
+
 
         let x_header_colum = df_header.column("x").unwrap().sub(drill_holes.offset_x.unwrap());
         df_header = (*df_header.with_column(x_header_colum).unwrap()).clone();
@@ -143,13 +159,12 @@ impl DrillHolesMesh {
         let z_header_colum = df_header.column("z").unwrap().sub(drill_holes.offset_z.unwrap());
         df_header = (*df_header.with_column(z_header_colum).unwrap()).clone();
 
-        let header_id_drills = df_header.column("hole-id").unwrap().unique().unwrap();
-
         let df_drills_orientation = df_header.left_join(&df_survey, ["hole-id"], ["hole-id"]).unwrap();
 
         let mut iters_drills = df_drills_orientation
             .columns(["hole-id","x","y","z","from","to","azimuth","dip"]).unwrap()
             .iter().map(|s| s.iter()).collect::<Vec<_>>();
+
 
 
 
@@ -194,45 +209,53 @@ impl DrillHolesMesh {
                 );
 
                 let mesh = Self::generate_triangular_prisma(
-                    from_coord,
-                    to_coord,
+                    &from_coord,
+                    &to_coord,
                     5.0);
-                result.push(mesh);
 
+                let material_grade = StandardMaterial{
+                    base_color: Self::material_color_scale((au-p25_grade_au)/(p75_grade_au-p25_grade_au)),
+                    // cull_mode: Option::from(Face::Front),
+                    ..Default::default()
+                };
+
+                meshes_result.push(mesh);
+                transforms_result.push((from_coord+to_coord)*0.5);
+                material_au_result.push(material_grade);
             }
 
         }
 
         //TODO
-        result
+        (meshes_result, transforms_result, material_au_result)
+    }
+
+    fn material_color_scale(value: f32) -> Color {
+        let (r, g, b) = if value < 0.5 {
+            let v = if value>0.0 {value * 2.0} else {0.0};
+            (v, v, 0.0)
+        } else {
+            let v = if (1.0 - value) > 0.0 {(1.0 - value) * 2.0} else {1.0};
+            (v, 1.0, 0.0)
+        };
+        Color::rgb(r, g, b)
     }
 
     fn generate_triangular_prisma(
-        coord1: Vec3,
-        coord2: Vec3,
-        width: f32
+        coord1: &Vec3,
+        coord2: &Vec3,
+        radius: f32
     ) -> Mesh {
-        let normal = (coord2 - coord1).normalize();
-        let up = if normal.dot(Vec3::Y) < 0.99 { Vec3::Y } else { Vec3::X };
-        let side = normal.cross(up).normalize() * (width / 2.0);
+        let length = (coord2.x - coord1.x).hypot(coord2.y - coord1.y).hypot(coord2.z - coord1.z);
 
-        let a = coord1 + side;
-        let b = coord1 - side;
-        let c = coord2 - side;
-        let d = coord2 + side;
+        let shape = Cylinder {
+            radius: radius,
+            height: length,
+            resolution: 3,
+            ..Default::default()
+        };
 
-        let vertices = vec![a, b, c, d];
-        let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
-
-        mesh.set_indices(Some(bevy::render::mesh::Indices::U32(vec![0, 1, 2, 0, 2, 3])));
-        mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, vertices.clone());
-
-        let normals = vec![normal; 4];
-        mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
-
-        mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, vec![[0., 0.]; vertices.len()]);
-
-        mesh
+        Mesh::from(shape)
     }
 
 

@@ -9,8 +9,8 @@
             grab_mode: None,
             hit_test: true,
             physical_position: Some((
-              x: 159.0,
-              y: 642.0,
+              x: 245.0,
+              y: 630.0,
             )),
           ),
           present_mode: Fifo,
@@ -90,6 +90,10 @@
           ),
         )),
         "bevy_render::view::visibility::VisibleEntities": (),
+        "bevy_core::name::Name": (
+          hash: 14439570424754678049,
+          name: "Grid",
+        ),
         "bevy_render::view::visibility::Visibility": Inherited,
         "bevy_render::view::visibility::ComputedVisibility": (
           flags: (
@@ -279,8 +283,8 @@
                     w: -0.0,
                   ),
                   w_axis: (
-                    x: 1.6204026,
-                    y: 6.525771,
+                    x: 1.6761873,
+                    y: 6.600151,
                     z: 12.720703,
                     w: 1.0,
                   ),
@@ -301,7 +305,7 @@
                   z_axis: (
                     x: 0.0,
                     y: 0.0,
-                    z: 0.18540092,
+                    z: 0.17922221,
                     w: 0.0,
                   ),
                   w_axis: (
@@ -315,13 +319,13 @@
                   x_axis: (
                     x: 0.0,
                     y: -0.26666668,
-                    z: 0.11124056,
+                    z: 0.10753333,
                     w: 0.0,
                   ),
                   y_axis: (
                     x: 0.0,
                     y: 0.20000002,
-                    z: 0.14832073,
+                    z: 0.14337777,
                     w: 0.0,
                   ),
                   z_axis: (
@@ -333,7 +337,7 @@
                   w_axis: (
                     x: 4.2402344,
                     y: -0.8730469,
-                    z: -0.14816165,
+                    z: -0.12656093,
                     w: 1.0,
                   ),
                 ),
@@ -360,29 +364,29 @@
                     w: -0.0,
                   ),
                   w_axis: (
-                    x: 21.983414,
-                    y: 33.634945,
-                    z: -13.948731,
+                    x: 22.727634,
+                    y: 34.6541,
+                    z: -13.961427,
                     w: 1.0,
                   ),
                 ),
                 projection: (
                   x_axis: (
-                    x: 0.025974026,
+                    x: 0.024691358,
                     y: 0.0,
                     z: 0.0,
                     w: 0.0,
                   ),
                   y_axis: (
                     x: 0.0,
-                    y: 0.025974026,
+                    y: 0.024691358,
                     z: 0.0,
                     w: 0.0,
                   ),
                   z_axis: (
                     x: 0.0,
                     y: 0.0,
-                    z: 0.013660454,
+                    z: 0.013205204,
                     w: 0.0,
                   ),
                   w_axis: (
@@ -395,30 +399,30 @@
                 view_projection: (
                   x_axis: (
                     x: 0.0,
-                    y: -0.02077922,
-                    z: 0.008196273,
+                    y: -0.019753087,
+                    z: 0.0079231225,
                     w: 0.0,
                   ),
                   y_axis: (
                     x: 0.0,
-                    y: 0.015584416,
-                    z: 0.010928364,
+                    y: 0.0148148155,
+                    z: 0.010564163,
                     w: 0.0,
                   ),
                   z_axis: (
-                    x: -0.025974026,
+                    x: -0.024691358,
                     y: 0.0,
                     z: 0.0,
                     w: 0.0,
                   ),
                   w_axis: (
-                    x: -0.3623047,
-                    y: -0.06738281,
-                    z: 0.4522431,
+                    x: -0.34472656,
+                    y: -0.064453125,
+                    z: 0.4538346,
                     w: 1.0,
                   ),
                 ),
-                texel_size: 0.037597656,
+                texel_size: 0.03955078,
               ),
               (
                 view_transform: (
@@ -441,29 +445,29 @@
                     w: -0.0,
                   ),
                   w_axis: (
-                    x: 298.12573,
-                    y: 401.73276,
-                    z: -375.27344,
+                    x: 308.73416,
+                    y: 415.18396,
+                    z: -375.24854,
                     w: 1.0,
                   ),
                 ),
                 projection: (
                   x_axis: (
-                    x: 0.0019230769,
+                    x: 0.0018399263,
                     y: 0.0,
                     z: 0.0,
                     w: 0.0,
                   ),
                   y_axis: (
                     x: 0.0,
-                    y: 0.0019230769,
+                    y: 0.0018399263,
                     z: 0.0,
                     w: 0.0,
                   ),
                   z_axis: (
                     x: 0.0,
                     y: 0.0,
-                    z: 0.0010065109,
+                    z: 0.0009729677,
                     w: 0.0,
                   ),
                   w_axis: (
@@ -476,30 +480,30 @@
                 view_projection: (
                   x_axis: (
                     x: 0.0,
-                    y: -0.0015384615,
-                    z: 0.0006039066,
+                    y: -0.0014719411,
+                    z: 0.00058378064,
                     w: 0.0,
                   ),
                   y_axis: (
                     x: 0.0,
-                    y: 0.0011538462,
-                    z: 0.00080520875,
+                    y: 0.0011039559,
+                    z: 0.0007783742,
                     w: 0.0,
                   ),
                   z_axis: (
-                    x: -0.0019230769,
+                    x: -0.0018399263,
                     y: 0.0,
                     z: 0.0,
                     w: 0.0,
                   ),
                   w_axis: (
-                    x: -0.7216797,
-                    y: -0.0048828125,
-                    z: 0.49648118,
+                    x: -0.6904297,
+                    y: -0.00390625,
+                    z: 0.49659854,
                     w: 1.0,
                   ),
                 ),
-                texel_size: 0.5078125,
+                texel_size: 0.5307617,
               ),
               (
                 view_transform: (
@@ -522,29 +526,29 @@
                     w: -0.0,
                   ),
                   w_axis: (
-                    x: 4047.3862,
-                    y: 5396.515,
-                    z: -5279.341,
+                    x: 4186.848,
+                    y: 5582.4644,
+                    z: -5279.175,
                     w: 1.0,
                   ),
                 ),
                 projection: (
                   x_axis: (
-                    x: 0.00014169324,
+                    x: 0.00013559322,
                     y: 0.0,
                     z: 0.0,
                     w: 0.0,
                   ),
                   y_axis: (
                     x: 0.0,
-                    y: 0.00014169324,
+                    y: 0.00013559322,
                     z: 0.0,
                     w: 0.0,
                   ),
                   z_axis: (
                     x: 0.0,
                     y: 0.0,
-                    z: 0.00007416035,
+                    z: 0.00007168886,
                     w: 0.0,
                   ),
                   w_axis: (
@@ -557,30 +561,30 @@
                 view_projection: (
                   x_axis: (
                     x: 0.0,
-                    y: -0.00011335459,
-                    z: 0.000044496213,
+                    y: -0.000108474575,
+                    z: 0.00004301332,
                     w: 0.0,
                   ),
                   y_axis: (
                     x: 0.0,
-                    y: 0.00008501594,
-                    z: 0.000059328282,
+                    y: 0.00008135593,
+                    z: 0.000057351088,
                     w: 0.0,
                   ),
                   z_axis: (
-                    x: -0.00014169324,
+                    x: -0.00013559322,
                     y: 0.0,
                     z: 0.0,
                     w: 0.0,
                   ),
                   w_axis: (
-                    x: -0.7480469,
+                    x: -0.7158203,
                     y: 0.0,
-                    z: 0.49974072,
+                    z: 0.49974936,
                     w: 1.0,
                   ),
                 ),
-                texel_size: 6.89209,
+                texel_size: 7.2021484,
               ),
             ],
             (
@@ -931,9 +935,9 @@
       components: {
         "bevy_transform::components::transform::Transform": (
           translation: (
-            x: -5.839624,
-            y: -4.839723,
-            z: -8.840189,
+            x: 3.0,
+            y: 4.0,
+            z: 0.0,
           ),
           rotation: (0.3250576, 0.0, -0.3250576, 0.88807386),
           scale: (
@@ -961,9 +965,9 @@
             ),
           ),
           translation: (
-            x: -5.839624,
-            y: -4.839723,
-            z: -8.840189,
+            x: 3.0,
+            y: 4.0,
+            z: 0.0,
           ),
         )),
         "bevy_render::view::visibility::Visibility": Inherited,
@@ -973,10 +977,10 @@
           ),
         ),
         "bevy_asset::handle::Handle<bevy_render::mesh::mesh::Mesh>": (
-          id: Id("8ecbac0f-f545-4473-ad43-e1f4243af51e", 15633680070563130303),
+          id: Id("8ecbac0f-f545-4473-ad43-e1f4243af51e", 1389733322148051759),
         ),
         "bevy_asset::handle::Handle<bevy_pbr::pbr_material::StandardMaterial>": (
-          id: Id("7494888b-c082-457b-aacf-517228cc0c22", 17644882912609580555),
+          id: Id("7494888b-c082-457b-aacf-517228cc0c22", 3924208871866802890),
         ),
         "bevy_render::primitives::Aabb": (
           center: (
@@ -996,7 +1000,7 @@
       components: {
         "bevy_transform::components::transform::Transform": (
           translation: (
-            x: 5.489375,
+            x: 0.0,
             y: 2.0,
             z: 0.0,
           ),
@@ -1026,7 +1030,7 @@
             ),
           ),
           translation: (
-            x: 5.489375,
+            x: 0.0,
             y: 2.0,
             z: 0.0,
           ),
@@ -1038,10 +1042,10 @@
           ),
         ),
         "bevy_asset::handle::Handle<bevy_render::mesh::mesh::Mesh>": (
-          id: Id("8ecbac0f-f545-4473-ad43-e1f4243af51e", 17859195643973402386),
+          id: Id("8ecbac0f-f545-4473-ad43-e1f4243af51e", 12392722162793820137),
         ),
         "bevy_asset::handle::Handle<bevy_pbr::pbr_material::StandardMaterial>": (
-          id: Id("7494888b-c082-457b-aacf-517228cc0c22", 17644882912609580555),
+          id: Id("7494888b-c082-457b-aacf-517228cc0c22", 3924208871866802890),
         ),
         "bevy_render::primitives::Aabb": (
           center: (
@@ -1101,7 +1105,7 @@
           index: 6,
         )),
         "bevy_core::name::Name": (
-          hash: 12702738367594456588,
+          hash: 18368604665108469134,
           name: "DirectionalLight Gizmo",
         ),
         "bevy_render::view::visibility::render_layers::RenderLayers": (524288),
@@ -1112,10 +1116,10 @@
           ),
         ),
         "bevy_asset::handle::Handle<bevy_render::mesh::mesh::Mesh>": (
-          id: Id("8ecbac0f-f545-4473-ad43-e1f4243af51e", 11774406454119355949),
+          id: Id("8ecbac0f-f545-4473-ad43-e1f4243af51e", 18319676501848439946),
         ),
         "bevy_asset::handle::Handle<bevy_pbr::pbr_material::StandardMaterial>": (
-          id: Id("7494888b-c082-457b-aacf-517228cc0c22", 12520920009773395374),
+          id: Id("7494888b-c082-457b-aacf-517228cc0c22", 3094226089382528694),
         ),
         "bevy_render::primitives::Aabb": (
           center: (
@@ -1175,7 +1179,7 @@
           index: 5,
         )),
         "bevy_core::name::Name": (
-          hash: 10282832683769817739,
+          hash: 3425984441393901257,
           name: "Camera Gizmo",
         ),
         "bevy_render::view::visibility::render_layers::RenderLayers": (524288),
@@ -1186,10 +1190,10 @@
           ),
         ),
         "bevy_asset::handle::Handle<bevy_render::mesh::mesh::Mesh>": (
-          id: Id("8ecbac0f-f545-4473-ad43-e1f4243af51e", 11774406454119355949),
+          id: Id("8ecbac0f-f545-4473-ad43-e1f4243af51e", 18319676501848439946),
         ),
         "bevy_asset::handle::Handle<bevy_pbr::pbr_material::StandardMaterial>": (
-          id: Id("7494888b-c082-457b-aacf-517228cc0c22", 7539314947883369428),
+          id: Id("7494888b-c082-457b-aacf-517228cc0c22", 3420406441799021203),
         ),
         "bevy_render::primitives::Aabb": (
           center: (

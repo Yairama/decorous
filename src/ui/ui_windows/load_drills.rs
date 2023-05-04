@@ -188,11 +188,14 @@ fn load_files(
         }
     }
 
-    let drill_meshes = DrillHolesMesh::from_csv(drill_holes);
+    let (vec_meshes, vec_transforms, vec_au_materials) = DrillHolesMesh::from_csv(drill_holes);
 
     let mut count = 0;
 
-    for drill_mesh in drill_meshes{
+    for i in 0..vec_meshes.len(){
+        let drill_mesh = vec_meshes[i].clone();
+        let transform = vec_transforms[i].clone();
+        let au_material = vec_au_materials[i].clone();
         count+=1;
         if count<500{
             let mut meshes = world.get_resource_mut::<Assets<Mesh>>().unwrap();
@@ -202,16 +205,13 @@ fn load_files(
                 .get_resource_mut::<Assets<StandardMaterial>>()
                 .unwrap();
             let material = materials.add(
-                StandardMaterial{
-                    base_color: Color::rgb(0.3, 0.5, 0.3),
-                    cull_mode: None,
-                    ..Default::default()
-                }
+                au_material
             );
 
             world.spawn((PbrBundle {
                 mesh,
                 material,
+                transform: Transform::from_xyz(transform.x, transform.y, transform.z),
                 ..Default::default()
             }));
         }

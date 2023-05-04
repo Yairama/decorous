@@ -5,6 +5,7 @@ use bevy::{
     prelude::{Entity, Plugin},
     window::{MonitorSelection, Window, WindowPosition, WindowRef, WindowResolution},
 };
+use bevy::pbr::wireframe::WireframePlugin;
 
 pub use crate::ui::ui_core::egui_dock;
 #[doc(inline)]
@@ -120,7 +121,7 @@ impl Plugin for EditorPlugin {
             app.add_editor_window::<NewProject>();
             app.add_editor_window::<LoadDrills>();
 
-            app.add_plugin(bevy::pbr::wireframe::WireframePlugin);
+            app.add_plugin(WireframePlugin);
 
             app.insert_resource(controls::EditorControls::default_bindings())
                 .add_system(controls::editor_controls_system);
