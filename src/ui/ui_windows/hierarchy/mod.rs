@@ -10,7 +10,7 @@ use bevy::render::render_resource::Face;
 use bevy_inspector_egui::bevy_inspector::guess_entity_name;
 use bevy_inspector_egui::bevy_inspector::hierarchy::SelectedEntities;
 use bevy_inspector_egui::egui::{self, ScrollArea};
-use crate::custom_meshes::components::TopographyMesh;
+use crate::custom_meshes::topography_mesh::TopographyMesh;
 
 use crate::ui::ui_core::{
     editor_window::{EditorWindow, EditorWindowContext},

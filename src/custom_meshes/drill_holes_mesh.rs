@@ -15,102 +15,6 @@ use polars::prelude::*;
 use crate::ui::ui_file_loader::files::{CsvFile};
 use crate::utilities::math::analytic_geometry;
 
-#[derive(Component)]
-pub struct TopographyMesh{
-    pub offset_x: f64,
-    pub offset_y: f64,
-    pub offset_z: f64,
-}
-
-impl TopographyMesh {
-    fn calculate_normals(vertices: &[Vec3], triangles: &[usize]) -> Vec<Vec3> {
-        let mut normals = vec![Vec3::ZERO; vertices.len()];
-        for chunk in triangles.chunks(3) {
-            let a = vertices[chunk[0]];
-            let b = vertices[chunk[1]];
-            let c = vertices[chunk[2]];
-            let normal = (b - a).cross(c - a).normalize();
-            normals[chunk[0]] += normal;
-            normals[chunk[1]] += normal;
-            normals[chunk[2]] += normal;
-        }
-        for normal in &mut normals {
-            *normal = normal.normalize();
-        }
-        normals
-    }
-
-    fn create_mesh(vec: Vec<[f64;3]>) -> Mesh{
-        let points = vec.iter().map(|v| Point { x: v[0], y: v[1] }).collect::<Vec<Point>>();
-        let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
-        let result = triangulate(&points);
-
-        let triangles = result.triangles;
-        let vector_values = vec.iter().map(|v| Vec3::new(v[0] as f32, v[2] as f32, v[1] as f32)).collect::<Vec<_>>();
-        let normals = Self::calculate_normals(&vector_values, &triangles);
-
-        mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, vec![[0., 0.]; vector_values.len()]);
-        mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, vector_values);
-        mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
-        mesh.set_indices(Some(bevy::render::mesh::Indices::U32(triangles.into_iter().map(|i| i as u32).collect())));
-
-        mesh
-    }
-
-    pub fn from_points(mut vec: Vec<[f64;3]>) -> (Mesh, Self){
-        let min_x = vec.iter().map(|v| v[0]).min_by(|a, b| a.partial_cmp(b).unwrap()).unwrap();
-        let min_y = vec.iter().map(|v| v[1]).min_by(|a, b| a.partial_cmp(b).unwrap()).unwrap();
-        let min_z = vec.iter().map(|v| v[2]).min_by(|a, b| a.partial_cmp(b).unwrap()).unwrap();
-
-        for v in vec.iter_mut() {
-            v[0] -= min_x;
-            v[1] -= min_y;
-            v[2] -= min_z;
-        };
-        let mesh = Self::create_mesh(vec);
-
-        (mesh, Self { offset_x:min_x, offset_y: min_y, offset_z: min_z })
-    }
-
-    pub fn from_csv(csv: &CsvFile) -> Result<(Mesh, Self), Box<dyn Error>>{
-
-        let file = csv.get_file().unwrap();
-        let reader = BufReader::new(file);
-        let mut csv_reader = ReaderBuilder::new()
-            .has_headers(csv.header)
-            .delimiter(csv.sep)
-            .from_reader(reader);
-        let mut coords: Vec<[f64; 3]> = vec![];
-        let mut min_x = f64::MAX;
-        let mut min_y = f64::MAX;
-        let mut min_z = f64::MAX;
-
-        for result in csv_reader.records() {
-            let record = result?;
-
-            let x = record[0].parse::<f64>()?;
-            let y = record[1].parse::<f64>()?;
-            let z = record[2].parse::<f64>()?;
-
-            min_x = min_x.min(x);
-            min_y = min_y.min(y);
-            min_z = min_z.min(z);
-
-            coords.push([x, y, z]);
-        }
-
-        for v in coords.iter_mut() {
-            v[0] -= min_x;
-            v[1] -= min_y;
-            v[2] -= min_z;
-        }
-
-        let mesh = Self::create_mesh(coords);
-        Ok((mesh, Self { offset_x:min_x, offset_y: min_y, offset_z: min_z }))
-
-    }
-
-}
 
 /// Saves the files
 /// 0: Assay
@@ -126,11 +30,12 @@ pub struct DrillHolesMesh{
 }
 
 impl DrillHolesMesh {
-    pub fn from_csv(drill_holes: DrillHolesMesh) -> (Vec<Mesh>,Vec<Vec3>, Vec<[f32;3]>){
+    pub fn from_csv(drill_holes: DrillHolesMesh) -> (Vec<Mesh>,Vec<Vec3>){
         let assay = &drill_holes.files[0];
         let header = &drill_holes.files[1];
+        let lithography = &drill_holes.files[2];
         let survey = &drill_holes.files[3];
-        let lithography = &drill_holes.files[4];
+
 
 
         let df_assay = assay.dataframe().unwrap();
@@ -152,8 +57,8 @@ impl DrillHolesMesh {
             .quantile(0.25, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
         let p75_grade_cu = df_assay.column("cu").unwrap().f64().unwrap()
             .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
-        let p75_lithography = df_lithography.column("rock").unwrap().f64().unwrap()
-            .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
+        // let p75_lithography = df_lithography.column("rock").unwrap().f64().unwrap()
+        //     .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
 
 
         let x_header_colum = df_header.column("x").unwrap().sub(drill_holes.offset_x.unwrap());
@@ -211,7 +116,7 @@ impl DrillHolesMesh {
                     to
                 );
 
-                let grade_mesh = Self::generate_triangular_prisma(
+                let mut grade_mesh = Self::generate_triangular_prisma(
                     &grade_from_coord,
                     &grade_to_coord,
                     5.0);
@@ -220,11 +125,10 @@ impl DrillHolesMesh {
                 let material_au_grade = Self::material_color_scale((au-p25_grade_au)/(p75_grade_au-p25_grade_au));
                 let material_cu_grade = Self::material_color_scale((cu-p25_grade_cu)/(p75_grade_cu-p25_grade_cu));
 
-
+                grade_mesh.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![material_au_grade; grade_mesh.count_vertices()]);
                 grades_meshes_result.push(grade_mesh);
                 transforms_result.push((grade_from_coord + grade_to_coord)*0.5);
-                material_au_result.push(material_au_grade);
-                material_cu_result.push(material_cu_grade);
+
             }
 
 
@@ -234,10 +138,10 @@ impl DrillHolesMesh {
 
 
         //TODO
-        (grades_meshes_result, transforms_result, material_au_result)
+        (grades_meshes_result, transforms_result)
     }
 
-    fn material_color_scale(value: f32) -> [f32;3] {
+    fn material_color_scale(value: f32) -> [f32;4] {
         let (r, g, b) = if value < 0.5 {
             let v = if value>0.0 {value * 2.0} else {0.0};
             (v, v, 0.0)
@@ -245,7 +149,7 @@ impl DrillHolesMesh {
             let v = if (1.0 - value) > 0.0 {(1.0 - value) * 2.0} else {1.0};
             (v, 1.0, 0.0)
         };
-        [r, g, b]
+        [r, g, b, 1.0]
     }
 
     fn generate_triangular_prisma(
@@ -264,7 +168,6 @@ impl DrillHolesMesh {
 
         Mesh::from(shape)
     }
-
 
 
 }

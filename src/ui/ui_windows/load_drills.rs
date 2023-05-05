@@ -9,7 +9,8 @@ use bevy::prelude::{Entity, With};
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::egui;
 use egui::{Button, RichText, widgets};
-use crate::custom_meshes::components::{DrillHolesMesh, TopographyMesh};
+use crate::custom_meshes::topography_mesh::TopographyMesh;
+use crate::custom_meshes::drill_holes_mesh::DrillHolesMesh;
 use crate::ui::ui_file_loader::files::CsvFile;
 
 
@@ -188,14 +189,13 @@ fn load_files(
         }
     }
 
-    let (vec_meshes, vec_transforms, vec_au_materials) = DrillHolesMesh::from_csv(drill_holes);
+    let (vec_meshes, vec_transforms) = DrillHolesMesh::from_csv(drill_holes);
 
     let mut count = 0;
 
     for i in 0..vec_meshes.len(){
         let drill_mesh = vec_meshes[i].clone();
         let transform = vec_transforms[i].clone();
-        let au_material = vec_au_materials[i].clone();
         count+=1;
         if count<500{
             let mut meshes = world.get_resource_mut::<Assets<Mesh>>().unwrap();
@@ -205,7 +205,7 @@ fn load_files(
                 .get_resource_mut::<Assets<StandardMaterial>>()
                 .unwrap();
             let material = materials.add(
-                Color::rgb(au_material[0], au_material[1], au_material[2]).into()
+                StandardMaterial::default()
             );
 
             world.spawn((PbrBundle {
