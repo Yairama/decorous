@@ -205,7 +205,7 @@ fn load_files(
                 .get_resource_mut::<Assets<StandardMaterial>>()
                 .unwrap();
             let material = materials.add(
-                au_material
+                Color::rgb(au_material[0], au_material[1], au_material[2]).into()
             );
 
             world.spawn((PbrBundle {

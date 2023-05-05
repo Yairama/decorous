@@ -126,19 +126,23 @@ pub struct DrillHolesMesh{
 }
 
 impl DrillHolesMesh {
-    pub fn from_csv(drill_holes: DrillHolesMesh) -> (Vec<Mesh>,Vec<Vec3>, Vec<StandardMaterial>){
+    pub fn from_csv(drill_holes: DrillHolesMesh) -> (Vec<Mesh>,Vec<Vec3>, Vec<[f32;3]>){
         let assay = &drill_holes.files[0];
         let header = &drill_holes.files[1];
         let survey = &drill_holes.files[3];
+        let lithography = &drill_holes.files[4];
 
 
         let df_assay = assay.dataframe().unwrap();
         let mut df_header = header.dataframe().unwrap();
         let df_survey = survey.dataframe().unwrap();
+        let df_lithography = lithography.dataframe().unwrap();
 
-        let mut meshes_result: Vec<Mesh> = Vec::new();
+        let mut grades_meshes_result: Vec<Mesh> = Vec::new();
         let mut transforms_result: Vec<Vec3> = Vec::new();
-        let mut material_au_result: Vec<StandardMaterial> = Vec::new();
+        let mut material_au_result: Vec<[f32;3]> = Vec::new();
+        let mut material_cu_result: Vec<[f32;3]> = Vec::new();
+        let mut material_lithography: Vec<[f32;3]> = Vec::new();
 
         let p25_grade_au = df_assay.column("au").unwrap().f64().unwrap()
             .quantile(0.25, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
@@ -147,6 +151,8 @@ impl DrillHolesMesh {
         let p25_grade_cu = df_assay.column("cu").unwrap().f64().unwrap()
             .quantile(0.25, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
         let p75_grade_cu = df_assay.column("cu").unwrap().f64().unwrap()
+            .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
+        let p75_lithography = df_lithography.column("rock").unwrap().f64().unwrap()
             .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
 
 
@@ -164,9 +170,6 @@ impl DrillHolesMesh {
         let mut iters_drills = df_drills_orientation
             .columns(["hole-id","x","y","z","from","to","azimuth","dip"]).unwrap()
             .iter().map(|s| s.iter()).collect::<Vec<_>>();
-
-
-
 
         for _row_drills in 0..df_drills_orientation.height(){
             let hole_id = iters_drills[0].next().unwrap().to_string().replace("\"", "");
@@ -194,43 +197,47 @@ impl DrillHolesMesh {
                 let au = iters_assay[3].next().unwrap().try_extract::<f32>().unwrap();
                 let cu = iters_assay[4].next().unwrap().try_extract::<f32>().unwrap();
 
-                let from_coord = analytic_geometry::interpolate_point_on_the_line(
+                let grade_from_coord = analytic_geometry::interpolate_point_on_the_line(
                     [x,z,y],
                     azimuth,
                     dip,
                     from
                 );
 
-                let to_coord = analytic_geometry::interpolate_point_on_the_line(
+                let grade_to_coord = analytic_geometry::interpolate_point_on_the_line(
                     [x,z,y],
                     azimuth,
                     dip,
                     to
                 );
 
-                let mesh = Self::generate_triangular_prisma(
-                    &from_coord,
-                    &to_coord,
+                let grade_mesh = Self::generate_triangular_prisma(
+                    &grade_from_coord,
+                    &grade_to_coord,
                     5.0);
 
-                let material_grade = StandardMaterial{
-                    base_color: Self::material_color_scale((au-p25_grade_au)/(p75_grade_au-p25_grade_au)),
-                    // cull_mode: Option::from(Face::Front),
-                    ..Default::default()
-                };
 
-                meshes_result.push(mesh);
-                transforms_result.push((from_coord+to_coord)*0.5);
-                material_au_result.push(material_grade);
+                let material_au_grade = Self::material_color_scale((au-p25_grade_au)/(p75_grade_au-p25_grade_au));
+                let material_cu_grade = Self::material_color_scale((cu-p25_grade_cu)/(p75_grade_cu-p25_grade_cu));
+
+
+                grades_meshes_result.push(grade_mesh);
+                transforms_result.push((grade_from_coord + grade_to_coord)*0.5);
+                material_au_result.push(material_au_grade);
+                material_cu_result.push(material_cu_grade);
             }
+
+
 
         }
 
+
+
         //TODO
-        (meshes_result, transforms_result, material_au_result)
+        (grades_meshes_result, transforms_result, material_au_result)
     }
 
-    fn material_color_scale(value: f32) -> Color {
+    fn material_color_scale(value: f32) -> [f32;3] {
         let (r, g, b) = if value < 0.5 {
             let v = if value>0.0 {value * 2.0} else {0.0};
             (v, v, 0.0)
@@ -238,7 +245,7 @@ impl DrillHolesMesh {
             let v = if (1.0 - value) > 0.0 {(1.0 - value) * 2.0} else {1.0};
             (v, 1.0, 0.0)
         };
-        Color::rgb(r, g, b)
+        [r, g, b]
     }
 
     fn generate_triangular_prisma(
