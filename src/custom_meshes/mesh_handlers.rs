@@ -3,9 +3,9 @@ use bevy::prelude::*;
 use bevy::render::mesh::{Indices, PrimitiveTopology, VertexAttributeValues};
 
 
-fn combine_meshes(
+pub fn combine_meshes(
     meshes: Vec<Mesh>,
-    transforms: &[Transform],
+    transforms: Vec<Transform>,
     use_normals: bool,
     use_tangents: bool,
     use_uvs: bool,
@@ -146,3 +146,45 @@ fn combine_meshes(
 
     mesh
 }
+
+pub fn color_scale(value: f32) -> [f32; 4] {
+    // assert!(0.0 <= value && value <= 1.0, "El valor debe estar entre 0 y 1");
+
+    let value = if value>=0.0 {value} else {0.0};
+
+    let green = [0.0, 1.0, 0.0];
+    let yellow = [1.0, 1.0, 0.0];
+    let blue = [0.0, 0.0, 1.0];
+    let red = [1.0, 0.0, 0.0];
+
+    return if value < 0.33 {
+        let t = value / 0.33;
+        [
+            green[0] + t * (yellow[0] - green[0]),
+            green[1] + t * (yellow[1] - green[1]),
+            green[2] + t * (yellow[2] - green[2]),
+            1.0
+        ]
+    } else if value < 0.67 {
+        let t = (value - 0.33) / 0.34;
+        [
+            yellow[0] + t * (blue[0] - yellow[0]),
+            yellow[1] + t * (blue[1] - yellow[1]),
+            yellow[2] + t * (blue[2] - yellow[2]),
+            1.0
+        ]
+    } else {
+        let t = (value - 0.67) / 0.33;
+        [
+            blue[0] + t * (red[0] - blue[0]),
+            blue[1] + t * (red[1] - blue[1]),
+            blue[2] + t * (red[2] - blue[2]),
+            1.0
+        ]
+    }
+}
+
+
+
+
+

@@ -30,7 +30,7 @@ pub struct DrillHolesMesh{
 }
 
 impl DrillHolesMesh {
-    pub fn from_csv(drill_holes: DrillHolesMesh) -> (Vec<Mesh>,Vec<Vec3>){
+    pub fn from_csv(drill_holes: DrillHolesMesh) -> Mesh{
         let assay = &drill_holes.files[0];
         let header = &drill_holes.files[1];
         let lithography = &drill_holes.files[2];
@@ -44,7 +44,7 @@ impl DrillHolesMesh {
         let df_lithography = lithography.dataframe().unwrap();
 
         let mut grades_meshes_result: Vec<Mesh> = Vec::new();
-        let mut transforms_result: Vec<Vec3> = Vec::new();
+        let mut transforms_result: Vec<Transform> = Vec::new();
         let mut material_au_result: Vec<[f32;3]> = Vec::new();
         let mut material_cu_result: Vec<[f32;3]> = Vec::new();
         let mut material_lithography: Vec<[f32;3]> = Vec::new();
@@ -103,14 +103,14 @@ impl DrillHolesMesh {
                 let cu = iters_assay[4].next().unwrap().try_extract::<f32>().unwrap();
 
                 let grade_from_coord = analytic_geometry::interpolate_point_on_the_line(
-                    [x,z,y],
+                    [x,y,z],
                     azimuth,
                     dip,
                     from
                 );
 
                 let grade_to_coord = analytic_geometry::interpolate_point_on_the_line(
-                    [x,z,y],
+                    [x,y,z],
                     azimuth,
                     dip,
                     to
@@ -119,15 +119,16 @@ impl DrillHolesMesh {
                 let mut grade_mesh = Self::generate_triangular_prisma(
                     &grade_from_coord,
                     &grade_to_coord,
-                    5.0);
+                    3.0);
 
 
-                let material_au_grade = Self::material_color_scale((au-p25_grade_au)/(p75_grade_au-p25_grade_au));
+                let material_au_grade = super::mesh_handlers::color_scale((au-p25_grade_au)/(p75_grade_au-p25_grade_au));
                 let material_cu_grade = Self::material_color_scale((cu-p25_grade_cu)/(p75_grade_cu-p25_grade_cu));
 
                 grade_mesh.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![material_au_grade; grade_mesh.count_vertices()]);
                 grades_meshes_result.push(grade_mesh);
-                transforms_result.push((grade_from_coord + grade_to_coord)*0.5);
+                let transform = (grade_from_coord + grade_to_coord)*0.5;
+                transforms_result.push(Transform::from_xyz(transform.x,transform.y,transform.z));
 
             }
 
@@ -135,10 +136,13 @@ impl DrillHolesMesh {
 
         }
 
-
+        let final_mesh = super::mesh_handlers::combine_meshes(grades_meshes_result,
+                                                              transforms_result,
+                                                              true,false,
+                                                              false,true);
 
         //TODO
-        (grades_meshes_result, transforms_result)
+        final_mesh
     }
 
     fn material_color_scale(value: f32) -> [f32;4] {

@@ -9,16 +9,24 @@ pub fn interpolate_point_on_the_line(
     distance: f32,
 ) -> Vec3 {
 
-    let azimuth_rad = azimuth * PI as f32/ 180.0;
-    let dip_rad = dip * PI as f32/ 180.0;
+    let azimuth_rad = azimuth.to_radians();
+    let dip_rad = dip.to_radians();
 
-    let vector_x = dip_rad.sin() * azimuth_rad.cos();
-    let vector_y = dip_rad.sin() * azimuth_rad.sin();
-    let vector_z = dip_rad.cos();
+    let delta_x = distance * azimuth_rad.sin() * dip_rad.cos();
+    let delta_y = distance * azimuth_rad.cos() * dip_rad.cos();
+    let delta_z = distance * dip_rad.sin();
 
-    let x = origin[0] + distance * vector_x;
-    let y = origin[1] + distance * vector_y;
-    let z = origin[2] + distance * vector_z;
+    let point_1 = [
+        origin[0] + delta_x,
+        origin[1] + delta_y,
+        origin[2] + delta_z,
+    ];
 
-    Vec3::new(x, y, z)
+    let point_2 = [
+        origin[0] - delta_x,
+        origin[1] - delta_y,
+        origin[2] - delta_z,
+    ];
+
+    Vec3::new(point_1[0], point_1[2], point_1[1])
 }

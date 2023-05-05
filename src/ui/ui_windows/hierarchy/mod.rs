@@ -119,7 +119,7 @@ fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World, cx: &mut EditorW
                             let mut materials = world
                                 .get_resource_mut::<Assets<StandardMaterial>>()
                                 .unwrap();
-                            let material = materials.add(Color::rgb(0.3, 0.5, 0.3).into());
+                            let material = materials.add(Color::rgb(135.0/255.0,135.0/255.0,73.0/255.0).into());
 
                             world.spawn((PbrBundle {
                                 mesh,
@@ -149,7 +149,7 @@ fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World, cx: &mut EditorW
                                 .unwrap();
                             let material = materials.add(
                                 StandardMaterial{
-                                    base_color: Color::rgb(0.3, 0.5, 0.3),
+                                    base_color: Color::rgb(135.0/255.0,135.0/255.0,73.0/255.0),
                                     cull_mode: None,
                                     ..Default::default()
                                 }
