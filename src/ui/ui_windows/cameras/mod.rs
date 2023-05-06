@@ -188,13 +188,13 @@ fn cameras_ui(ui: &mut egui::Ui, world: &mut World) {
     for cam in prev_cams.0.iter() {
         ui.horizontal(|ui| {
             // let active = curr_active.or(prev_active);
-
-            /*let text = egui::RichText::new("👁").heading();
-            let show_hide_button = egui::Button::new(text).frame(false);
-            if ui.add(show_hide_button).clicked() {
-                toggle_cam_visibility = Some((camera.to_string(), active));
-            }*/
-
+            //
+            // let text = egui::RichText::new("👁").heading();
+            // let show_hide_button = egui::Button::new(text).frame(false);
+            // if ui.add(show_hide_button).clicked() {
+            //     toggle_cam_visibility = Some((camera.to_string(), active));
+            // }
+            //
             // if active.is_none() {
             //     ui.set_enabled(false);
             // }

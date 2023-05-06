@@ -368,6 +368,7 @@ impl Editor {
                     });
                 }
 
+                egui::widgets::global_dark_light_mode_switch(ui);
 
                 ui.menu_button("File", |ui| {
                     for (&_, window) in self.windows.iter().filter(|(_, data)| data.menu_bar_window == MenuBarWindow::File) {

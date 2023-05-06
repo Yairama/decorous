@@ -40,22 +40,33 @@ pub fn setup_system(
 
     let mat = standard_materials.add(StandardMaterial::default());
 
-    // cube
-    commands.spawn(PbrBundle {
-        material: mat.clone(),
-        mesh: meshes.add(Mesh::from(shape::Cube { size: 1.0 })),
-        transform: Transform {
-            translation: Vec3::new(3., 4., 0.),
-            rotation: Quat::from_rotation_arc(Vec3::Y, Vec3::ONE.normalize()),
-            scale: Vec3::splat(1.5),
-        },
-        ..default()
-    });
-
-    commands.spawn(PbrBundle {
+    let cube = commands.spawn((PbrBundle {
         material: mat.clone(),
         mesh: meshes.add(Mesh::from(shape::Cube { size: 2.0 })),
         transform: Transform::from_xyz(0.0, 2.0, 0.0),
         ..default()
-    });
+    }, Name::new("Test Cube"))).id();
+
+    let child_1 = commands.spawn(
+        PbrBundle {
+            material: mat.clone(),
+            mesh: meshes.add(Mesh::from(shape::Cube { size: 2.0 })),
+            transform: Transform::from_xyz(-5.0, 2.0, 0.0),
+            ..default()
+        }
+    ).id();
+
+    let child_2 = commands.spawn(
+        PbrBundle {
+            material: mat.clone(),
+            mesh: meshes.add(Mesh::from(shape::Cube { size: 2.0 })),
+            transform: Transform::from_xyz(5.0, 2.0, 0.0),
+            ..default()
+        }
+    ).id();
+
+    commands.entity(cube).push_children(
+        &[child_1, child_2]
+    );
+
 }
