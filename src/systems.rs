@@ -1,5 +1,6 @@
 use bevy::{prelude::*, pbr::{CascadeShadowConfigBuilder}};
 use bevy_infinite_grid::{GridShadowCamera, InfiniteGrid, InfiniteGridBundle};
+use crate::ui::ui_windows::hierarchy::HideInEditor;
 
 pub fn setup_system(
     mut commands: Commands,
@@ -13,15 +14,15 @@ pub fn setup_system(
             ..Default::default()
         },
         ..Default::default()
-    }, Name::new("Grid")));
+    }, Name::new("Grid"), HideInEditor));
 
-    commands
-        .spawn(Camera3dBundle {
-            transform: Transform::from_xyz(0.0, 4.37, 14.77),
+    // commands
+    //     .spawn(Camera3dBundle {
+    //         transform: Transform::from_xyz(0.0, 4.37, 14.77),
+    //
+    //         ..Default::default()
+    //     })
 
-            ..Default::default()
-        })
-        .insert(GridShadowCamera);
 
     commands.spawn(DirectionalLightBundle {
         transform: Transform::from_translation(Vec3::X * 15. + Vec3::Y * 20.)

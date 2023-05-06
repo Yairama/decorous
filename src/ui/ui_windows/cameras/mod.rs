@@ -8,6 +8,7 @@ use bevy::render::view::RenderLayers;
 use bevy::utils::HashSet;
 use bevy::window::WindowRef;
 use bevy::{prelude::*, render::primitives::Aabb};
+use bevy_infinite_grid::GridShadowCamera;
 use crate::ui::ui_core::{
     editor_window::{EditorWindow, EditorWindowContext},
     Editor, EditorEvent,
@@ -240,7 +241,7 @@ fn spawn_editor_cameras(mut commands: Commands, editor: Res<Editor>) {
         Name::new("Editor Camera 3D Free"),
         NotInScene,
         render_layers,
-    ));
+    ));;
 
     commands.spawn((
         Camera3dBundle {
@@ -265,7 +266,7 @@ fn spawn_editor_cameras(mut commands: Commands, editor: Res<Editor>) {
         Name::new("Editor Camera 3D Pan/Orbit"),
         NotInScene,
         render_layers,
-    ));
+    )).insert(GridShadowCamera);;
 
     commands.spawn((
         Camera2dBundle {

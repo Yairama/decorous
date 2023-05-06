@@ -123,7 +123,7 @@ impl DrillHolesMesh {
 
 
                 let material_au_grade = super::mesh_handlers::color_scale((au-p25_grade_au)/(p75_grade_au-p25_grade_au));
-                let material_cu_grade = Self::material_color_scale((cu-p25_grade_cu)/(p75_grade_cu-p25_grade_cu));
+                let material_cu_grade = super::mesh_handlers::color_scale((cu-p25_grade_cu)/(p75_grade_cu-p25_grade_cu));
 
                 grade_mesh.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![material_au_grade; grade_mesh.count_vertices()]);
                 grades_meshes_result.push(grade_mesh);
@@ -143,17 +143,6 @@ impl DrillHolesMesh {
 
         //TODO
         final_mesh
-    }
-
-    fn material_color_scale(value: f32) -> [f32;4] {
-        let (r, g, b) = if value < 0.5 {
-            let v = if value>0.0 {value * 2.0} else {0.0};
-            (v, v, 0.0)
-        } else {
-            let v = if (1.0 - value) > 0.0 {(1.0 - value) * 2.0} else {1.0};
-            (v, 1.0, 0.0)
-        };
-        [r, g, b, 1.0]
     }
 
     fn generate_triangular_prisma(
