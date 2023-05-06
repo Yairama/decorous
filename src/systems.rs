@@ -16,12 +16,12 @@ pub fn setup_system(
         ..Default::default()
     }, Name::new("Grid"), HideInEditor));
 
-    // commands
-    //     .spawn(Camera3dBundle {
-    //         transform: Transform::from_xyz(0.0, 4.37, 14.77),
-    //
-    //         ..Default::default()
-    //     })
+    commands
+        .spawn((Camera3dBundle {
+            transform: Transform::from_xyz(0.0, 4.37, 14.77),
+
+            ..Default::default()
+        }, HideInEditor));
 
 
     commands.spawn(DirectionalLightBundle {
