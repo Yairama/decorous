@@ -4,7 +4,7 @@ use bevy::ecs::event::Events;
 use bevy::window::{WindowMode, self};
 use bevy::{prelude::*, utils::HashMap};
 use bevy_inspector_egui::bevy_egui::{egui, EguiContext};
-use egui_dock::{NodeIndex, TabIndex};
+use egui_dock::{NodeIndex, TabBarStyle, TabIndex};
 use indexmap::IndexMap;
 
 use super::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
@@ -309,26 +309,6 @@ impl Editor {
             return;
         }
 
-        let mut tree = std::mem::replace(
-            &mut internal_state.tree,
-            egui_dock::Tree::new(Vec::default()),
-        );
-
-        egui_dock::DockArea::new(&mut tree)
-            .style(egui_dock::Style {
-                tab_bar_background_color: ctx.style().visuals.window_fill(),
-                ..egui_dock::Style::from_egui(ctx.style().as_ref())
-            })
-            .show(
-                ctx,
-                &mut TabViewer {
-                    editor: self,
-                    internal_state,
-                    world,
-                },
-            );
-        internal_state.tree = tree;
-
         let pointer_pos = ctx.input(|input| input.pointer.interact_pos());
         self.pointer_used = pointer_pos.map_or(false, |pos| !self.is_in_viewport(pos));
 
@@ -348,6 +328,31 @@ impl Editor {
             }
             (Some(_), true) => {}
         }
+
+        let mut tree = std::mem::replace(
+            &mut internal_state.tree,
+            egui_dock::Tree::new(Vec::default()),
+        );
+
+        egui_dock::DockArea::new(&mut tree)
+            .style(egui_dock::Style {
+                // tab_bar_background_color: ctx.style().visuals.window_fill(),
+                tab_bar: TabBarStyle{
+                    bg_fill: ctx.style().visuals.window_fill(),
+                    ..TabBarStyle::default()
+                },
+                ..egui_dock::Style::from_egui(ctx.style().as_ref())
+            })
+            .show(
+                ctx,
+                &mut TabViewer {
+                    editor: self,
+                    internal_state,
+                    world,
+                },
+            );
+        internal_state.tree = tree;
+
     }
 
 /// Here add the menu bar buttons
@@ -361,12 +366,7 @@ impl Editor {
     ) {
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
             let bar_response = egui::menu::bar(ui, |ui| {
-                if !self.always_active && play_pause_button(self.active, ui).clicked() {
-                    self.active = !self.active;
-                    editor_events.send(EditorEvent::Toggle {
-                        now_active: self.active,
-                    });
-                }
+
 
                 egui::widgets::global_dark_light_mode_switch(ui);
 
@@ -576,10 +576,3 @@ impl egui_dock::TabViewer for TabViewer<'_> {
     }
 }
 
-fn play_pause_button(active: bool, ui: &mut egui::Ui) -> egui::Response {
-    let icon = match active {
-        true => "▶",
-        false => "⏸",
-    };
-    ui.add(egui::Button::new(icon).frame(false))
-}
