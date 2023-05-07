@@ -20,6 +20,7 @@ use crate::ui::ui_file_loader::files::{CsvFile, DxfFile, FileProperties};
 use crate::ui::ui_windows::add::AddItem;
 use crate::ui::ui_windows::load_drills::LoadDrills;
 use crate::ui::ui_windows::new_project::NewProject;
+use crate::ui::ui_windows::nodes_creator::NodesCreator;
 // use bevy_mod_picking::backends::egui::EguiPointer;
 // use bevy_mod_picking::prelude::{IsPointerEvent, PointerClick, PointerButton};
 
@@ -92,110 +93,14 @@ fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World, cx: &mut EditorW
 
         ui.separator();
 
-        egui::menu::menu_button(ui, "+", |ui| {
-            let response_topography = ui.menu_button("Topography", |ui|{
-
-                ui.menu_button("Poly line", |ui|{
-                    if ui.button("DXF").clicked() {
-                        // TODO
-                    }
-                });
-
-                ui.menu_button("Mesh", |ui|{
-                    if ui.button("DXF").clicked() {
-
-                        if let Some(path) = rfd::FileDialog::new().add_filter("CAD files (dxf)", &["dxf"]).pick_file() {
-
-                            let dxf = DxfFile{
-                                path: Some(path.display().to_string()).unwrap()
-                            };
-
-                            let _points: Vec<[f64;3]> = dxf.get_points();
-                            let (topography_mesh, topography) = TopographyMesh::from_points(_points);
-
-                            let mut meshes = world.get_resource_mut::<Assets<Mesh>>().unwrap();
-                            let mesh = meshes.add(topography_mesh);
-
-                            let mut materials = world
-                                .get_resource_mut::<Assets<StandardMaterial>>()
-                                .unwrap();
-                            let material = materials.add(Color::rgb(135.0/255.0,135.0/255.0,73.0/255.0).into());
-
-                            world.spawn((PbrBundle {
-                                mesh,
-                                material,
-                                ..Default::default()
-                            }, topography, dxf.clone(), Name::new(dxf.name().unwrap())));
-
-                            ui.close_menu();
-                        }
-                    }
-
-                    if ui.button("CSV").clicked() {
-
-                        if let Some(path) = rfd::FileDialog::new().add_filter("CAD files (csv)", &["csv"]).pick_file() {
-                            let csv = CsvFile{
-                                path: Some(path.display().to_string()).unwrap(),
-                                header: true,
-                                sep: b',',
-                            };
-                            let (topography_mesh, topography) = TopographyMesh::from_csv(&csv).unwrap();
-
-                            let mut meshes = world.get_resource_mut::<Assets<Mesh>>().unwrap();
-                            let mesh = meshes.add(topography_mesh);
-
-                            let mut materials = world
-                                .get_resource_mut::<Assets<StandardMaterial>>()
-                                .unwrap();
-                            let material = materials.add(
-                                StandardMaterial{
-                                    base_color: Color::rgb(135.0/255.0,135.0/255.0,73.0/255.0),
-                                    cull_mode: None,
-                                    ..Default::default()
-                                }
-                            );
-
-                            world.spawn((PbrBundle {
-                                mesh,
-                                material,
-                                ..Default::default()
-                            }, topography, csv.clone(), Name::new(csv.name().unwrap())));
-
-                            ui.close_menu();
-
-
-
-                        }
-
-                        // TODO
-                    }
-                });
-
-            });
-
-            if ui.button("Drills").clicked() {
-
-                cx.open_floating_window::<LoadDrills>();
-                ui.close_menu();
-                // TODO
-            }
-
-            ui.menu_button("3D Models", |ui|{
-                if ui.button("OBJ").clicked(){
-                    // TODO
-                }
-                if ui.button("gLTF").clicked(){
-                    // TODO
-                }
-            });
-        });
-
+        if ui.button("\u{2795}").clicked(){
+            cx.open_floating_window::<NodesCreator>();
+        }
         ui.separator();
-
-        egui::menu::menu_button(ui, "↻", |ui|{
-
-        });
-
+        if ui.button("\u{27F2}").clicked(){
+            // TODO
+        }
+        ui.separator();
     });
 
     ui.separator();
