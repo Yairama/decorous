@@ -111,6 +111,8 @@ struct EditorWindowData {
     viewport_toolbar_ui_fn: UiFn,
     viewport_ui_fn: UiFn,
     default_size: (f32, f32),
+    collapsible: bool,
+    resizable: bool,
     menu_bar_window: MenuBarWindow
 }
 
@@ -245,6 +247,8 @@ impl Editor {
             viewport_ui_fn,
             name: W::NAME,
             default_size: W::DEFAULT_SIZE,
+            collapsible: W::COLLAPSIBLE,
+            resizable: W::RESIZABLE,
             menu_bar_window: W::MENU_BAR
         };
         if self.windows.insert(type_id, data).is_some() {
@@ -467,11 +471,14 @@ impl Editor {
             let title = self.windows[&floating_window.window].name;
 
             let mut open = true;
+            let resizable = self.windows[&floating_window.window].resizable;
+            let collapsible = self.windows[&floating_window.window].collapsible;
             let default_size = self.windows[&floating_window.window].default_size;
             let mut window = egui::Window::new(title)
                 .id(id)
                 .open(&mut open)
-                .resizable(true)
+                .resizable(resizable)
+                .collapsible(collapsible)
                 .default_size(default_size);
             if let Some(initial_position) = floating_window.initial_position {
                 window = window.default_pos(initial_position - egui::Vec2::new(10.0, 10.0))

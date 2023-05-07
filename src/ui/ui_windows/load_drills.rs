@@ -34,6 +34,8 @@ impl EditorWindow for LoadDrills {
 
     type State = LoadDrillsWindowState;
     const MENU_BAR : MenuBarWindow = MenuBarWindow::File;
+    const RESIZABLE: bool = false;
+    const COLLAPSIBLE: bool = false;
     // const DEFAULT_SIZE: (f32, f32) = (500.0, 500.0);
     const NAME: &'static str = "Load Drills";
 

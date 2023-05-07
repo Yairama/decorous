@@ -15,6 +15,7 @@ pub use egui;
 
 pub use crate::ui::ui_windows as default_windows;
 use crate::ui::ui_windows::load_drills::LoadDrills;
+use crate::ui::ui_windows::nodes_creator::NodesCreator;
 
 /// Commonly used types and extension traits
 pub use crate::ui::ui_windows::scenes::NotInScene;
@@ -120,6 +121,7 @@ impl Plugin for EditorPlugin {
             app.add_editor_window::<controls::ControlsWindow>();
             app.add_editor_window::<NewProject>();
             app.add_editor_window::<LoadDrills>();
+            app.add_editor_window::<NodesCreator>();
 
             app.add_plugin(WireframePlugin);
 

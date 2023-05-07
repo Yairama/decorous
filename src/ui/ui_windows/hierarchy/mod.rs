@@ -394,3 +394,36 @@ fn rename_entity_ui(ui: &mut egui::Ui, rename_info: &mut RenameInfo, world: &mut
 
     TextEdit::store_state(ui.ctx(), id, edit_state);
 }
+
+fn drag_source(ui: &mut egui::Ui, id: egui::Id, body: impl FnOnce(&mut egui::Ui)) {
+    let is_being_dragged = ui.memory(|mem| mem.is_being_dragged(id));
+
+    if !is_being_dragged {
+        let response = ui.scope(body).response;
+
+        // Check for drags:
+        let response = ui.interact(response.rect, id, egui::Sense::drag());
+        if response.hovered() {
+            ui.ctx().set_cursor_icon(egui::CursorIcon::Grab);
+        }
+    } else {
+        ui.ctx().set_cursor_icon(egui::CursorIcon::Grabbing);
+
+        // Paint the body to a new layer:
+        let layer_id = egui::LayerId::new(egui::Order::Tooltip, id);
+        let response = ui.with_layer_id(layer_id, body).response;
+
+        // Now we move the visuals of the body to where the mouse is.
+        // Normally you need to decide a location for a widget first,
+        // because otherwise that widget cannot interact with the mouse.
+        // However, a dragged component cannot be interacted with anyway
+        // (anything with `Order::Tooltip` always gets an empty [`Response`])
+        // So this is fine!
+
+        if let Some(pointer_pos) = ui.ctx().pointer_interact_pos() {
+            let delta = pointer_pos - response.rect.center();
+            ui.ctx().translate_layer(layer_id, delta);
+        }
+    }
+}
+

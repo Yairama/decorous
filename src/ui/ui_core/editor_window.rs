@@ -19,6 +19,8 @@ pub trait EditorWindow: 'static {
 
     const NAME: &'static str;
     const DEFAULT_SIZE: (f32, f32) = (0.0, 0.0);
+    const RESIZABLE: bool = true;
+    const COLLAPSIBLE: bool = true;
     const MENU_BAR : MenuBarWindow = MenuBarWindow::NoMenuBar;
 
     fn ui(world: &mut World, cx: EditorWindowContext, ui: &mut egui::Ui);
