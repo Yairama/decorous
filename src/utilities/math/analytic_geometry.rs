@@ -1,5 +1,5 @@
 
-use std::f64::consts::PI;
+
 use bevy::math::Vec3;
 
 pub fn interpolate_point_on_the_line(
@@ -22,7 +22,7 @@ pub fn interpolate_point_on_the_line(
         origin[2] + delta_z,
     ];
 
-    let point_2 = [
+    let _point_2 = [
         origin[0] - delta_x,
         origin[1] - delta_y,
         origin[2] - delta_z,

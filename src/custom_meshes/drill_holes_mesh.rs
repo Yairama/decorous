@@ -1,16 +1,16 @@
-use std::error::Error;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+
+
+
 use std::ops::Sub;
 use bevy::prelude::*;
 use bevy::prelude::shape::Cylinder;
-use bevy::prelude::system_adapter::new;
-use bevy::reflect::erased_serde::__private::serde::__private::de::Content::String;
-use delaunator::{Point, triangulate};
-use bevy::render::mesh::{PrimitiveTopology};
-use bevy::render::render_resource::Face;
-use csv::ReaderBuilder;
-use polars::export::arrow::array::equal;
+
+
+
+
+
+
+
 use polars::prelude::*;
 use crate::ui::ui_file_loader::files::{CsvFile};
 use crate::utilities::math::analytic_geometry;
@@ -41,13 +41,13 @@ impl DrillHolesMesh {
         let df_assay = assay.dataframe().unwrap();
         let mut df_header = header.dataframe().unwrap();
         let df_survey = survey.dataframe().unwrap();
-        let df_lithography = lithography.dataframe().unwrap();
+        let _df_lithography = lithography.dataframe().unwrap();
 
         let mut grades_meshes_result: Vec<Mesh> = Vec::new();
         let mut transforms_result: Vec<Transform> = Vec::new();
-        let mut material_au_result: Vec<[f32;3]> = Vec::new();
-        let mut material_cu_result: Vec<[f32;3]> = Vec::new();
-        let mut material_lithography: Vec<[f32;3]> = Vec::new();
+        let _material_au_result: Vec<[f32;3]> = Vec::new();
+        let _material_cu_result: Vec<[f32;3]> = Vec::new();
+        let _material_lithography: Vec<[f32;3]> = Vec::new();
 
         let p25_grade_au = df_assay.column("au").unwrap().f64().unwrap()
             .quantile(0.25, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
@@ -81,8 +81,8 @@ impl DrillHolesMesh {
             let x = iters_drills[1].next().unwrap().try_extract::<f32>().unwrap();
             let y = iters_drills[2].next().unwrap().try_extract::<f32>().unwrap();
             let z = iters_drills[3].next().unwrap().try_extract::<f32>().unwrap();
-            let survey_from = iters_drills[4].next().unwrap().try_extract::<f32>().unwrap();
-            let survey_to = iters_drills[5].next().unwrap().try_extract::<f32>().unwrap();
+            let _survey_from = iters_drills[4].next().unwrap().try_extract::<f32>().unwrap();
+            let _survey_to = iters_drills[5].next().unwrap().try_extract::<f32>().unwrap();
             let azimuth = iters_drills[6].next().unwrap().try_extract::<f32>().unwrap();
             let dip = iters_drills[7].next().unwrap().try_extract::<f32>().unwrap();
 
@@ -123,7 +123,7 @@ impl DrillHolesMesh {
 
 
                 let material_au_grade = super::mesh_handlers::color_scale((au-p25_grade_au)/(p75_grade_au-p25_grade_au));
-                let material_cu_grade = super::mesh_handlers::color_scale((cu-p25_grade_cu)/(p75_grade_cu-p25_grade_cu));
+                let _material_cu_grade = super::mesh_handlers::color_scale((cu-p25_grade_cu)/(p75_grade_cu-p25_grade_cu));
 
                 grade_mesh.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![material_au_grade; grade_mesh.count_vertices()]);
                 grades_meshes_result.push(grade_mesh);

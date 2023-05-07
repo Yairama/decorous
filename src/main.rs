@@ -6,8 +6,8 @@ mod systems;
 mod custom_meshes;
 mod utilities;
 
-use custom_meshes::*;
-use utilities::*;
+
+
 use systems::*;
 use ui::ui_setup::EditorPlugin;
 

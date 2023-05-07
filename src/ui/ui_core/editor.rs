@@ -1,7 +1,7 @@
 use std::any::{Any, TypeId};
 
 use bevy::ecs::event::Events;
-use bevy::window::{WindowMode, self};
+use bevy::window::{WindowMode};
 use bevy::{prelude::*, utils::HashMap};
 use bevy_inspector_egui::bevy_egui::{egui, EguiContext};
 use egui_dock::{NodeIndex, TabBarStyle, TabIndex};
@@ -366,7 +366,7 @@ impl Editor {
         world: &mut World,
         ctx: &egui::Context,
         internal_state: &mut EditorInternalState,
-        editor_events: &mut Events<EditorEvent>,
+        _editor_events: &mut Events<EditorEvent>,
     ) {
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
             let bar_response = egui::menu::bar(ui, |ui| {

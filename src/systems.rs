@@ -1,5 +1,5 @@
 use bevy::{prelude::*, pbr::{CascadeShadowConfigBuilder}};
-use bevy_infinite_grid::{GridShadowCamera, InfiniteGrid, InfiniteGridBundle};
+use bevy_infinite_grid::{InfiniteGrid, InfiniteGridBundle};
 use crate::ui::ui_windows::hierarchy::HideInEditor;
 
 pub fn setup_system(

@@ -1,6 +1,5 @@
 use bevy::{
-    prelude::{AppTypeRegistry, ReflectResource, World},
-    reflect::TypeRegistryInternal,
+    prelude::{World},
 };
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::egui;
@@ -15,7 +14,7 @@ impl EditorWindow for NewProject {
     const DEFAULT_SIZE: (f32, f32) = (500.0, 500.0);
     const NAME: &'static str = "New Project";
 
-    fn ui(world: &mut World, mut cx: EditorWindowContext, ui: &mut egui::Ui){
+    fn ui(_world: &mut World, _cx: EditorWindowContext, ui: &mut egui::Ui){
         
         ui.horizontal(|ui|{
             ui.label("text");

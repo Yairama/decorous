@@ -1,14 +1,14 @@
 use std::error::Error;
 use std::fs::File;
-use std::io::{BufRead, BufReader, Read};
+use std::io::{BufRead, BufReader};
 use std::path::Path;
 use bevy::prelude::*;
-use bevy::render::mesh::{PrimitiveTopology};
-use csv::{Reader, ReaderBuilder};
-use delaunator::{Point, triangulate};
+
+
+
 use dxf::Drawing;
 use dxf::entities::EntityType;
-use polars::error::PolarsError;
+
 use polars::prelude::*;
 
 pub trait FileProperties{
@@ -98,7 +98,7 @@ impl FileProperties for CsvFile {
 impl CsvFile {
 
     pub fn get_file(&self) -> Result<File, Box<dyn Error>>{
-        let mut file = File::open(self.path.clone())?;
+        let file = File::open(self.path.clone())?;
         Ok(file)
     }
 

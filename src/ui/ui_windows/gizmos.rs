@@ -193,16 +193,16 @@ fn draw_gizmo(
         return;
     }
 
-    let mut stroke_width = 4.0;
-    let mut gizmo_size = 75.0;
-    let mut custom_highlight_color = false;
-    let mut highlight_color = Color32::GOLD;
-    let mut x_color = Color32::from_rgb(255, 0, 148);
-    let mut y_color = Color32::from_rgb(148, 255, 0);
-    let mut z_color = Color32::from_rgb(0, 148, 255);
-    let mut s_color = Color32::WHITE;
-    let mut inactive_alpha = 0.5;
-    let mut highlight_alpha = 1.0;
+    let stroke_width = 4.0;
+    let gizmo_size = 75.0;
+    let custom_highlight_color = false;
+    let highlight_color = Color32::GOLD;
+    let x_color = Color32::from_rgb(255, 0, 148);
+    let y_color = Color32::from_rgb(148, 255, 0);
+    let z_color = Color32::from_rgb(0, 148, 255);
+    let s_color = Color32::WHITE;
+    let inactive_alpha = 0.5;
+    let highlight_alpha = 1.0;
 
     let visuals = GizmoVisuals {
         stroke_width,

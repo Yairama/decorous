@@ -1,18 +1,18 @@
 use std::error::Error;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-use std::ops::Sub;
+
+use std::io::{BufReader};
+
 use bevy::prelude::*;
-use bevy::prelude::system_adapter::new;
-use bevy::reflect::erased_serde::__private::serde::__private::de::Content::String;
+
+
 use delaunator::{Point, triangulate};
 use bevy::render::mesh::{PrimitiveTopology};
-use bevy::render::render_resource::Face;
+
 use csv::ReaderBuilder;
-use polars::export::arrow::array::equal;
+
 use polars::prelude::*;
 use crate::ui::ui_file_loader::files::{CsvFile};
-use crate::utilities::math::analytic_geometry;
+
 
 #[derive(Component)]
 pub struct TopographyMesh{

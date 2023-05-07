@@ -18,23 +18,23 @@ impl EditorWindow for LoadTopography {
     const NAME: &'static str = "Load Topography";
     const MENU_BAR: MenuBarWindow = MenuBarWindow::File;
 
-    fn ui(world: &mut World, cx: EditorWindowContext, ui: &mut Ui) {
+    fn ui(_world: &mut World, _cx: EditorWindowContext, _ui: &mut Ui) {
         todo!()
     }
 
-    fn menu_ui(world: &mut World, cx: EditorWindowContext, ui: &mut Ui) {
+    fn menu_ui(_world: &mut World, _cx: EditorWindowContext, _ui: &mut Ui) {
         todo!()
     }
 
-    fn viewport_toolbar_ui(world: &mut World, cx: EditorWindowContext, ui: &mut Ui) {
+    fn viewport_toolbar_ui(_world: &mut World, _cx: EditorWindowContext, _ui: &mut Ui) {
         todo!()
     }
 
-    fn viewport_ui(world: &mut World, cx: EditorWindowContext, ui: &mut Ui) {
+    fn viewport_ui(_world: &mut World, _cx: EditorWindowContext, _ui: &mut Ui) {
         todo!()
     }
 
-    fn app_setup(app: &mut App) {
+    fn app_setup(_app: &mut App) {
         todo!()
     }
 }

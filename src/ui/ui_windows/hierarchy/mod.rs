@@ -5,21 +5,21 @@ use bevy::pbr::wireframe::Wireframe;
 use bevy::prelude::*;
 use bevy::reflect::TypeRegistryInternal;
 use bevy::render::{Extract, RenderApp};
-use bevy::render::camera::ScalingMode;
-use bevy::render::render_resource::Face;
+
+
 use bevy_inspector_egui::bevy_inspector::guess_entity_name;
 use bevy_inspector_egui::bevy_inspector::hierarchy::SelectedEntities;
 use bevy_inspector_egui::egui::{self, ScrollArea};
-use crate::custom_meshes::topography_mesh::TopographyMesh;
+
 
 use crate::ui::ui_core::{
     editor_window::{EditorWindow, EditorWindowContext},
     Editor,
 };
-use crate::ui::ui_file_loader::files::{CsvFile, DxfFile, FileProperties};
-use crate::ui::ui_windows::add::AddItem;
-use crate::ui::ui_windows::load_drills::LoadDrills;
-use crate::ui::ui_windows::new_project::NewProject;
+
+
+
+
 use crate::ui::ui_windows::nodes_creator::NodesCreator;
 // use bevy_mod_picking::backends::egui::EguiPointer;
 // use bevy_mod_picking::prelude::{IsPointerEvent, PointerClick, PointerButton};
@@ -86,7 +86,7 @@ impl EditorWindow for HierarchyWindow {
     }
 }
 
-fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, world: &mut World, cx: &mut EditorWindowContext){
+fn hierarchy_menu_bar<'a>(ui: &mut egui::Ui, _world: &mut World, cx: &mut EditorWindowContext){
     ui.separator();
 
     egui::menu::bar(ui, |ui| {
