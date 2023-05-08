@@ -92,6 +92,19 @@ fn make_ui<'a>(world: &mut World,
 
     });
 
+    let state = cx.state_mut::<NodesCreator>().unwrap();
+
+    if let Some(status) = &state.load_node_result {
+        match status {
+            Ok(()) => {
+                ui.label(RichText::new("Success!").color(egui::Color32::GREEN));
+            }
+            Err(error) => {
+                ui.label(RichText::new(error.to_string()).color(egui::Color32::RED));
+            }
+        }
+    }
+
 }
 
 
