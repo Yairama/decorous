@@ -202,13 +202,15 @@ fn load_files(
         StandardMaterial::default()
     );
 
-    world.spawn((PbrBundle {
+    let drill_holes_id = world.spawn((PbrBundle {
         mesh,
         material,
         ..Default::default()
     },
         if state.topography_mesh=="" {Name::new("Drill Holes")} else {Name::new(state.topography_mesh.clone() + " Drill Holes")}
-    ));
+    )).id();
+
+
 
     //TODO
 

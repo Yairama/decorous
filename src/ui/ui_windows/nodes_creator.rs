@@ -1,6 +1,5 @@
 
 use bevy::prelude::*;
-use egui::{RichText, Ui};
 use crate::custom_meshes::topography_mesh::TopographyMesh;
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use crate::ui::ui_file_loader::files::{CsvFile, DxfFile, FileProperties};
@@ -24,20 +23,19 @@ impl EditorWindow for NodesCreator {
     const COLLAPSIBLE: bool = false;
     const MENU_BAR: MenuBarWindow = MenuBarWindow::File;
 
-    fn ui(world: &mut World, mut cx: EditorWindowContext, ui: &mut Ui) {
+    fn ui(world: &mut World, mut cx: EditorWindowContext, ui: &mut egui::Ui) {
 
         make_ui(world, &mut cx, ui);
-
 
     }
 
 }
 
-fn make_ui<'a>(world: &mut World,
-               cx: &'a mut EditorWindowContext,
+fn make_ui(world: &mut World,
+               cx: &mut EditorWindowContext,
                ui: &mut egui::Ui) {
 
-    let mut result: Result<(), Box<dyn std::error::Error + Send + Sync>> = Ok(());
+    let mut result: Option<Result<(), Box<dyn std::error::Error + Send + Sync>>> = None;
     ui.horizontal(|ui|{
 
         egui::ScrollArea::vertical()
@@ -67,7 +65,7 @@ fn make_ui<'a>(world: &mut World,
                                             let dxf = DxfFile{
                                                 path: Some(path.display().to_string()).unwrap()
                                             };
-                                            result = generate_topography_mesh_from_dxf(&dxf, world);
+                                            result = Option::from(generate_topography_mesh_from_dxf(&dxf, world));
 
                                         }
                                     }
@@ -79,7 +77,7 @@ fn make_ui<'a>(world: &mut World,
                                                 header: true,
                                                 sep: b',',
                                             };
-                                            result = generate_topography_mesh_from_csv(csv, world);
+                                            result = Option::from(generate_topography_mesh_from_csv(csv, world));
                                         }
                                     }
                                 });
@@ -91,19 +89,6 @@ fn make_ui<'a>(world: &mut World,
         });
 
     });
-
-    let state = cx.state_mut::<NodesCreator>().unwrap();
-
-    if let Some(status) = &state.load_node_result {
-        match status {
-            Ok(()) => {
-                ui.label(RichText::new("Success!").color(egui::Color32::GREEN));
-            }
-            Err(error) => {
-                ui.label(RichText::new(error.to_string()).color(egui::Color32::RED));
-            }
-        }
-    }
 
 }
 
