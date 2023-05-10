@@ -1,8 +1,12 @@
-
+use std::any::TypeId;
+use std::collections::HashMap;
 use bevy::prelude::*;
+use egui::RichText;
+use indexmap::IndexMap;
 use crate::custom_meshes::topography_mesh::TopographyMesh;
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use crate::ui::ui_file_loader::files::{CsvFile, DxfFile, FileProperties};
+use crate::ui::ui_core::editor::{EditorWindowState, EditorWindowData};
 use crate::ui::ui_windows::load_drills::LoadDrills;
 
 
@@ -14,6 +18,10 @@ pub struct NodesCreatorState{
 }
 
 pub struct NodesCreator;
+// {
+//     windows: IndexMap<TypeId, EditorWindowData>,
+//     window_states: HashMap<TypeId, EditorWindowState>,
+// }
 
 impl EditorWindow for NodesCreator {
     type State = NodesCreatorState;
@@ -36,8 +44,8 @@ fn make_ui(world: &mut World,
                ui: &mut egui::Ui) {
 
     let mut result: Option<Result<(), Box<dyn std::error::Error + Send + Sync>>> = None;
-    ui.horizontal(|ui|{
 
+    ui.horizontal(|ui|{
         egui::ScrollArea::vertical()
             .max_width(200.0)
             .show(ui,|ui|{
@@ -66,7 +74,6 @@ fn make_ui(world: &mut World,
                                                 path: Some(path.display().to_string()).unwrap()
                                             };
                                             result = Option::from(generate_topography_mesh_from_dxf(&dxf, world));
-
                                         }
                                     }
 
@@ -78,6 +85,8 @@ fn make_ui(world: &mut World,
                                                 sep: b',',
                                             };
                                             result = Option::from(generate_topography_mesh_from_csv(csv, world));
+                                            let state = cx.state_mut::<NodesCreator>().unwrap();
+                                            state.load_node_result=result;
                                         }
                                     }
                                 });
@@ -89,6 +98,18 @@ fn make_ui(world: &mut World,
         });
 
     });
+
+    let state = cx.state_mut::<NodesCreator>().unwrap();
+    if let Some(status) = &state.load_node_result {
+        match status {
+            Ok(()) => {
+                ui.label(RichText::new("Load Success!").color(egui::Color32::GREEN));
+            }
+            Err(error) => {
+                ui.label(RichText::new(error.to_string()).color(egui::Color32::RED));
+            }
+        }
+    }
 
 }
 

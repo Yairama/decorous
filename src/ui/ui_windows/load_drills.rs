@@ -1,3 +1,4 @@
+use std::any::TypeId;
 use std::error::Error;
 
 use bevy::{
@@ -8,6 +9,7 @@ use bevy::prelude::{Entity, With};
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::egui;
 use egui::{RichText};
+use indexmap::IndexMap;
 use crate::custom_meshes::topography_mesh::TopographyMesh;
 use crate::custom_meshes::drill_holes_mesh::DrillHolesMesh;
 use crate::ui::ui_file_loader::files::CsvFile;
@@ -23,7 +25,7 @@ pub struct LoadDrillsWindowState{
     lithography_headers: bool,
     survey: String,
     survey_headers: bool,
-    topography_mesh: String,
+    topography_mesh: Option<Entity>,
     load_files_result: Option<Result<(), Box<dyn Error + Send + Sync>>>,
 }
 
@@ -106,9 +108,9 @@ impl EditorWindow for LoadDrills {
 
                 for entity in filtered_query.iter(world){
                     let name = world.get::<Name>(entity).unwrap().to_string();
-                    let selected = state.topography_mesh==name;
+                    let selected = state.topography_mesh== Option::from(entity);
                     if ui.selectable_label(selected,&name).clicked(){
-                        state.topography_mesh = name;
+                        state.topography_mesh = Option::from(entity);
                     }
                 }
 
@@ -116,7 +118,7 @@ impl EditorWindow for LoadDrills {
 
             let enter_pressed = ui.input(|input| input.key_pressed(egui::Key::Enter));
 
-            if state.topography_mesh == ""{
+            if state.topography_mesh == None {
                 ui.label(RichText::new("No topography selected").color(egui::Color32::RED));
             }
 
@@ -175,13 +177,13 @@ fn load_files(
         offset_z: None,
     };
 
-    if state.topography_mesh!="" {
+    if state.topography_mesh!= None {
 
         let mut filtered_query = world
             .query_filtered::<Entity, (With<Name>, With<TopographyMesh>)>();
         for entity in filtered_query.iter(world){
-            let name = world.get::<Name>(entity).unwrap().to_string();
-            if name==state.topography_mesh{
+            // let name = world.get::<Name>(entity).unwrap().to_string();
+            if entity==state.topography_mesh.unwrap(){
                 let topography = world.get::<TopographyMesh>(entity).unwrap();
                 drill_holes.offset_x = Option::from(topography.offset_x as f32);
                 drill_holes.offset_y = Option::from(topography.offset_y as f32);
@@ -190,25 +192,31 @@ fn load_files(
         }
     }
 
-    let final_mesh = DrillHolesMesh::from_csv(drill_holes);
+    let final_meshes = DrillHolesMesh::from_csv(drill_holes);
 
-    let mut meshes = world.get_resource_mut::<Assets<Mesh>>().unwrap();
-    let mesh = meshes.add(final_mesh);
+    for final_mesh in final_meshes{
+        let mut meshes = world.get_resource_mut::<Assets<Mesh>>().unwrap();
+        let mesh = meshes.add(final_mesh);
 
-    let mut materials = world
-        .get_resource_mut::<Assets<StandardMaterial>>()
-        .unwrap();
-    let material = materials.add(
-        StandardMaterial::default()
-    );
+        let mut materials = world
+            .get_resource_mut::<Assets<StandardMaterial>>()
+            .unwrap();
+        let material = materials.add(
+            StandardMaterial::default()
+        );
 
-    let drill_holes_id = world.spawn((PbrBundle {
-        mesh,
-        material,
-        ..Default::default()
-    },
-        if state.topography_mesh=="" {Name::new("Drill Holes")} else {Name::new(state.topography_mesh.clone() + " Drill Holes")}
-    )).id();
+        let drill_holes_id = world.spawn((PbrBundle {
+            mesh,
+            material,
+            ..Default::default()
+        },
+                                          Name::new("Drill Holes")
+        )).id();
+
+        world.entity_mut(state.topography_mesh.unwrap()).add_child(drill_holes_id);
+    }
+
+
 
 
 

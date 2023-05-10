@@ -104,7 +104,7 @@ pub(crate) type UiFn =
     Box<dyn Fn(&mut World, EditorWindowContext, &mut egui::Ui) + Send + Sync + 'static>;
 pub(crate) type EditorWindowState = Box<dyn Any + Send + Sync>;
 
-struct EditorWindowData {
+pub struct EditorWindowData {
     name: &'static str,
     ui_fn: UiFn,
     menu_ui_fn: UiFn,

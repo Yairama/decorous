@@ -30,7 +30,7 @@ pub struct DrillHolesMesh{
 }
 
 impl DrillHolesMesh {
-    pub fn from_csv(drill_holes: DrillHolesMesh) -> Mesh{
+    pub fn from_csv(drill_holes: DrillHolesMesh) -> Vec<Mesh>{
         let assay = &drill_holes.files[0];
         let header = &drill_holes.files[1];
         let lithography = &drill_holes.files[2];
@@ -41,9 +41,10 @@ impl DrillHolesMesh {
         let df_assay = assay.dataframe().unwrap();
         let mut df_header = header.dataframe().unwrap();
         let df_survey = survey.dataframe().unwrap();
-        let _df_lithography = lithography.dataframe().unwrap();
+        let df_lithography = lithography.dataframe().unwrap();
 
-        let mut grades_meshes_result: Vec<Mesh> = Vec::new();
+        let mut au_grades_meshes_result: Vec<Mesh> = Vec::new();
+        let mut cu_grades_meshes_result: Vec<Mesh> = Vec::new();
         let mut transforms_result: Vec<Transform> = Vec::new();
         let _material_au_result: Vec<[f32;3]> = Vec::new();
         let _material_cu_result: Vec<[f32;3]> = Vec::new();
@@ -53,12 +54,16 @@ impl DrillHolesMesh {
             .quantile(0.25, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
         let p75_grade_au = df_assay.column("au").unwrap().f64().unwrap()
             .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
+
         let p25_grade_cu = df_assay.column("cu").unwrap().f64().unwrap()
             .quantile(0.25, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
         let p75_grade_cu = df_assay.column("cu").unwrap().f64().unwrap()
             .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
-        // let p75_lithography = df_lithography.column("rock").unwrap().f64().unwrap()
-        //     .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
+
+        let p25_lithography = df_lithography.column("rock").unwrap().i64().unwrap()
+            .quantile(0.25, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
+        let p75_lithography = df_lithography.column("rock").unwrap().i64().unwrap()
+            .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
 
 
         let x_header_colum = df_header.column("x").unwrap().sub(drill_holes.offset_x.unwrap());
@@ -116,17 +121,24 @@ impl DrillHolesMesh {
                     to
                 );
 
-                let mut grade_mesh = Self::generate_triangular_prisma(
+                let mut prisma_mesh = Self::generate_triangular_prisma(
                     &grade_from_coord,
                     &grade_to_coord,
                     3.0);
 
 
                 let material_au_grade = super::mesh_handlers::color_scale((au-p25_grade_au)/(p75_grade_au-p25_grade_au));
-                let _material_cu_grade = super::mesh_handlers::color_scale((cu-p25_grade_cu)/(p75_grade_cu-p25_grade_cu));
+                let material_cu_grade = super::mesh_handlers::color_scale((cu-p25_grade_cu)/(p75_grade_cu-p25_grade_cu));
 
-                grade_mesh.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![material_au_grade; grade_mesh.count_vertices()]);
-                grades_meshes_result.push(grade_mesh);
+                let mut prisma_cu = prisma_mesh.clone();
+                let mut prisma_au = prisma_mesh;
+
+                prisma_au.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![material_au_grade; prisma_au.count_vertices()]);
+                prisma_cu.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![material_cu_grade; prisma_cu.count_vertices()]);
+
+
+                au_grades_meshes_result.push(prisma_au);
+                cu_grades_meshes_result.push(prisma_cu);
                 let transform = (grade_from_coord + grade_to_coord)*0.5;
                 transforms_result.push(Transform::from_xyz(transform.x,transform.y,transform.z));
 
@@ -136,13 +148,18 @@ impl DrillHolesMesh {
 
         }
 
-        let final_mesh = super::mesh_handlers::combine_meshes(grades_meshes_result,
-                                                              transforms_result,
-                                                              true,false,
-                                                              false,true);
+        let au_final_mesh = super::mesh_handlers::combine_meshes(au_grades_meshes_result,
+                                                              transforms_result.clone(),
+                                                              true, false,
+                                                              false, true);
+
+        let cu_final_mesh = super::mesh_handlers::combine_meshes(cu_grades_meshes_result,
+                                                                 transforms_result,
+                                                                 true, false,
+                                                                 false, true);
 
         //TODO
-        final_mesh
+        vec![au_final_mesh, cu_final_mesh]
     }
 
     fn generate_triangular_prisma(
