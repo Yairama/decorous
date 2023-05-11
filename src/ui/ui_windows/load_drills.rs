@@ -210,15 +210,11 @@ fn load_files(
             material,
             ..Default::default()
         },
-                                          Name::new("Drill Holes")
+        Name::new("Drill Holes")
         )).id();
 
         world.entity_mut(state.topography_mesh.unwrap()).add_child(drill_holes_id);
     }
-
-
-
-
 
     //TODO
 

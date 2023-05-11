@@ -14,6 +14,7 @@ use crate::ui::ui_core::{
     Editor, EditorEvent,
 };
 use bevy_inspector_egui::egui;
+use bevy_mod_picking::prelude::RaycastPickCamera;
 // use bevy_mod_picking::prelude::PickRaycastSource;
 
 use super::hierarchy::{HideInEditor, HierarchyWindow};
@@ -241,6 +242,7 @@ fn spawn_editor_cameras(mut commands: Commands, editor: Res<Editor>) {
         Name::new("Editor Camera 3D Free"),
         NotInScene,
         render_layers,
+        RaycastPickCamera::default(),
     ));;
 
     commands.spawn((
@@ -266,6 +268,7 @@ fn spawn_editor_cameras(mut commands: Commands, editor: Res<Editor>) {
         Name::new("Editor Camera 3D Pan/Orbit"),
         NotInScene,
         render_layers,
+        RaycastPickCamera::default(),
     )).insert(GridShadowCamera);;
 
     commands.spawn((
@@ -290,6 +293,7 @@ fn spawn_editor_cameras(mut commands: Commands, editor: Res<Editor>) {
         Name::new("Editor Camera 2D Pan/Zoom"),
         NotInScene,
         render_layers,
+        RaycastPickCamera::default(),
     ));
 }
 

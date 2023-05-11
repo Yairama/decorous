@@ -14,6 +14,7 @@ pub use egui;
 
 
 pub use crate::ui::ui_windows as default_windows;
+use crate::ui::ui_windows::hierarchy::picking::PickingWindow;
 use crate::ui::ui_windows::load_drills::LoadDrills;
 use crate::ui::ui_windows::nodes_creator::NodesCreator;
 
@@ -106,6 +107,7 @@ impl Plugin for EditorPlugin {
             use crate::ui::ui_windows::resources::ResourcesWindow;
             use crate::ui::ui_windows::scenes::SceneWindow;
             use crate::ui::ui_windows::new_project::NewProject;
+            use crate::ui::ui_windows::hierarchy::picking::PickingWindow;
 
             app.add_editor_window::<HierarchyWindow>();
             app.add_editor_window::<AssetsWindow>();
@@ -122,6 +124,7 @@ impl Plugin for EditorPlugin {
             app.add_editor_window::<NewProject>();
             app.add_editor_window::<LoadDrills>();
             app.add_editor_window::<NodesCreator>();
+            app.add_editor_window::<PickingWindow>();
 
             app.add_plugin(WireframePlugin);
 

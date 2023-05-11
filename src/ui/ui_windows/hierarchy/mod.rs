@@ -1,15 +1,17 @@
-// pub mod picking;
+pub mod picking;
 
 use bevy::ecs::entity::Entities;
 use bevy::pbr::wireframe::Wireframe;
 use bevy::prelude::*;
 use bevy::reflect::TypeRegistryInternal;
 use bevy::render::{Extract, RenderApp};
+use bevy_egui::EguiContext;
 
 
 use bevy_inspector_egui::bevy_inspector::guess_entity_name;
-use bevy_inspector_egui::bevy_inspector::hierarchy::SelectedEntities;
+use bevy_inspector_egui::bevy_inspector::hierarchy::{SelectedEntities, SelectionMode};
 use bevy_inspector_egui::egui::{self, ScrollArea};
+use bevy_mod_picking::prelude::PointerButton;
 
 
 use crate::ui::ui_core::{
@@ -112,40 +114,40 @@ fn clear_removed_entites(mut editor: ResMut<Editor>, entities: &Entities) {
     state.selected.retain(|entity| entities.contains(entity));
 }
 
-/*fn handle_events(
-    mut click_events: EventReader<PointerClick>,
-    mut editor: ResMut<Editor>,
-    editor_state: Res<EditorState>,
-    input: Res<Input<KeyCode>>,
-    egui_entity: Query<&EguiPointer>,
-    mut egui_ctx: ResMut<EguiContext>,
-) {
-    for click in click_events.iter() {
-        if !editor_state.active {
-            return;
-        }
-
-        if click.event_data().button != PointerButton::Primary {
-            continue;
-        }
-
-        if egui_entity.get(click.target()).is_ok() || egui_ctx.ctx_mut().wants_pointer_input() {
-            continue;
-        };
-
-        let state = editor.window_state_mut::<HierarchyWindow>().unwrap();
-
-        let ctrl = input.any_pressed([KeyCode::LControl, KeyCode::RControl]);
-        let shift = input.any_pressed([KeyCode::LShift, KeyCode::RShift]);
-        let mode = SelectionMode::from_ctrl_shift(ctrl, shift);
-
-        let entity = click.target();
-        info!("Selecting mesh, found {:?}", entity);
-        state
-            .selected
-            .select(mode, entity, |_, _| std::iter::once(entity));
-    }
-}*/
+// fn handle_events(
+//     mut click_events: EventReader<PointerClick>,
+//     mut editor: ResMut<Editor>,
+//     editor_state: Res<EditorState>,
+//     input: Res<Input<KeyCode>>,
+//     egui_entity: Query<&EguiPointer>,
+//     mut egui_ctx: ResMut<EguiContext>,
+// ) {
+//     for click in click_events.iter() {
+//         if !editor_state.active {
+//             return;
+//         }
+//
+//         if click.event_data().button != PointerButton::Primary {
+//             continue;
+//         }
+//
+//         if egui_entity.get(click.target()).is_ok() || egui_ctx.ctx_mut().wants_pointer_input() {
+//             continue;
+//         };
+//
+//         let state = editor.window_state_mut::<HierarchyWindow>().unwrap();
+//
+//         let ctrl = input.any_pressed([KeyCode::LControl, KeyCode::RControl]);
+//         let shift = input.any_pressed([KeyCode::LShift, KeyCode::RShift]);
+//         let mode = SelectionMode::from_ctrl_shift(ctrl, shift);
+//
+//         let entity = click.target();
+//         info!("Selecting mesh, found {:?}", entity);
+//         state
+//             .selected
+//             .select(mode, entity, |_, _| std::iter::once(entity));
+//     }
+// }
 
 fn extract_wireframe_for_selected(editor: Extract<Res<Editor>>, mut commands: Commands) {
     let wireframe_for_selected = editor

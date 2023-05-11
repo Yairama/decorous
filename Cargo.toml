@@ -29,7 +29,7 @@ opener = "0.6.1"
 egui = "0.21.0"
 egui-gizmo = "0.10.0"
 bevy_framepace = "0.12.1"
-bevy_mod_picking = "0.13.0"
+bevy_mod_picking = {version="0.13.0", feature = ["backend_egui"]}
 bevy_mod_debugdump = "0.7.0"
 csv = "1.2.1"
-polars = {version="0.28.0", features=["lazy", "strings"]}
+polars = {version="0.29.0", features=["lazy", "strings"]}
