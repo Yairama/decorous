@@ -3,6 +3,7 @@ use bevy_mod_picking::DefaultPickingPlugins;
 use bevy_mod_picking::prelude::{PickableBundle, RaycastPickTarget};
 use egui::Ui;
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext};
+use crate::ui::ui_windows::cameras::camera_3d_panorbit::CameraSystem;
 
 pub struct EditorPickingSet;
 
@@ -26,8 +27,9 @@ impl EditorWindow for PickingWindow {
 }
 
 pub fn setup(app: &mut App) {
-    app.add_plugins(DefaultPickingPlugins)
-        .add_system(auto_add_editor_picking_set);
+    app
+        .add_plugins(DefaultPickingPlugins)
+        .add_system(auto_add_editor_picking_set.in_set(CameraSystem::Movement));
 }
 
 fn auto_add_editor_picking_set(

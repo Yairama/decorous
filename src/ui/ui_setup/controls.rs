@@ -127,11 +127,9 @@ impl Binding {
 
 #[derive(PartialEq, Eq, Hash)]
 pub enum Action {
-    PlayPauseEditor,
-    PauseUnpauseTime,
+
     FocusSelected,
 
-    
     SetGizmoModeTranslate,
     
     SetGizmoModeRotate,
@@ -142,8 +140,6 @@ pub enum Action {
 impl std::fmt::Display for Action {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Action::PlayPauseEditor => write!(f, "Play/Pause editor"),
-            Action::PauseUnpauseTime => write!(f, "Pause/Unpause time"),
             Action::FocusSelected => write!(f, "Focus Selected Entity"),
             
             Action::SetGizmoModeTranslate => write!(f, "Activate translation gizmo"),
@@ -190,30 +186,7 @@ pub fn editor_controls_system(
     mut editor_events: EventWriter<EditorEvent>,
     mut editor: ResMut<Editor>,
 ) {
-    if controls.just_pressed(
-        Action::PlayPauseEditor,
-        &keyboard_input,
-        &mouse_input,
-        &editor,
-    ) && !editor.always_active()
-    {
-        let was_active = editor.active();
-        editor.set_active(!was_active);
-        editor_events.send(EditorEvent::Toggle {
-            now_active: !was_active,
-        });
-    }
 
-    if controls.just_pressed(
-        Action::PauseUnpauseTime,
-        &keyboard_input,
-        &mouse_input,
-        &editor,
-    ) {
-        if let Some(default_window) = editor.window_state_mut::<crate::ui::ui_windows::debug_settings::DebugSettingsWindow>() {
-            default_window.pause_time = !default_window.pause_time;
-        }
-    }
 
     if controls.just_pressed(
         Action::FocusSelected,
@@ -273,25 +246,6 @@ impl EditorControls {
     /// `T/R/S`: show translate/rotate/scale gizmo
     pub fn default_bindings() -> Self {
         let mut controls = EditorControls::default();
-
-        controls.insert(
-            Action::PauseUnpauseTime,
-            Binding {
-                input: UserInput::Chord(vec![
-                    Button::Keyboard(KeyCode::LControl),
-                    Button::Keyboard(KeyCode::Return),
-                ]),
-                conditions: vec![BindingCondition::ListeningForText(false)],
-            },
-        );
-
-        controls.insert(
-            Action::PlayPauseEditor,
-            Binding {
-                input: UserInput::Single(Button::Keyboard(KeyCode::E)),
-                conditions: vec![BindingCondition::ListeningForText(false)],
-            },
-        );
 
         controls.insert(
             Action::FocusSelected,
@@ -384,8 +338,6 @@ impl EditorWindow for ControlsWindow {
         let controls = world.get_resource::<EditorControls>().unwrap();
 
         for action in &[
-            Action::PlayPauseEditor,
-            Action::PauseUnpauseTime,
             Action::FocusSelected,
         ] {
             ui.label(egui::RichText::new(action.to_string()).strong());

@@ -1,5 +1,6 @@
 use bevy::{prelude::*, pbr::{CascadeShadowConfigBuilder}};
 use bevy_infinite_grid::{InfiniteGrid, InfiniteGridBundle};
+use bevy_mod_picking::prelude::RaycastPickCamera;
 use crate::ui::ui_windows::hierarchy::HideInEditor;
 
 pub fn setup_system(
@@ -16,12 +17,18 @@ pub fn setup_system(
         ..Default::default()
     }, Name::new("Grid"), HideInEditor));
 
-    commands
-        .spawn((Camera3dBundle {
-            transform: Transform::from_xyz(0.0, 4.37, 14.77),
-
-            ..Default::default()
-        }, HideInEditor));
+    // commands
+    //     .spawn((Camera3dBundle {
+    //         camera: Camera {
+    //             order: 150,
+    //             is_active: false,
+    //             ..default()
+    //         },
+    //         transform: Transform::from_xyz(0.0, 4.37, 14.77),
+    //         ..Default::default()
+    //     },
+    //         HideInEditor
+    //     ));
 
 
     commands.spawn(DirectionalLightBundle {

@@ -1,4 +1,3 @@
-pub mod camera_2d_panzoom;
 pub mod camera_3d_free;
 pub mod camera_3d_panorbit;
 use super::scenes::NotInScene;
@@ -49,7 +48,6 @@ pub struct CameraWindow;
 #[derive(Clone, Copy, PartialEq)]
 #[derive(Default)]
 pub enum EditorCamKind {
-    D2PanZoom,
     D3Free,
     #[default]
     D3PanOrbit,
@@ -58,15 +56,13 @@ pub enum EditorCamKind {
 impl EditorCamKind {
     fn name(self) -> &'static str {
         match self {
-            EditorCamKind::D2PanZoom => "2D (Pan/Zoom)",
             EditorCamKind::D3Free => "3D (Free)",
             EditorCamKind::D3PanOrbit => "3D (Pan/Orbit)",
         }
     }
 
-    fn all() -> [EditorCamKind; 3] {
+    fn all() -> [EditorCamKind; 2] {
         [
-            EditorCamKind::D2PanZoom,
             EditorCamKind::D3Free,
             EditorCamKind::D3PanOrbit,
         ]
@@ -120,14 +116,12 @@ impl EditorWindow for CameraWindow {
     fn app_setup(app: &mut App) {
         app.init_resource::<PreviouslyActiveCameras>();
 
-        app.add_plugin(camera_2d_panzoom::PanCamPlugin)
-            .add_plugin(camera_3d_free::FlycamPlugin)
+        app.add_plugin(camera_3d_free::FlycamPlugin)
             .add_plugin(camera_3d_panorbit::PanOrbitCameraPlugin)
             .add_system(
                 set_editor_cam_active
                     .before(camera_3d_panorbit::CameraSystem::Movement)
-                    .before(camera_3d_free::CameraSystem::Movement)
-                    .before(camera_2d_panzoom::CameraSystem::Movement),
+                    .before(camera_3d_free::CameraSystem::Movement),
             )
             .add_system(toggle_editor_cam.in_base_set(CoreSet::PreUpdate))
             .add_system(focus_selected.in_base_set(CoreSet::PreUpdate))
@@ -160,10 +154,6 @@ fn set_active_editor_camera_marker(world: &mut World, editor_cam: EditorCamKind)
     }
 
     let entity = match editor_cam {
-        EditorCamKind::D2PanZoom => {
-            let mut state = world.query_filtered::<Entity, With<EditorCamera2dPanZoom>>();
-            state.iter(world).next().unwrap()
-        }
         EditorCamKind::D3Free => {
             let mut state = world.query_filtered::<Entity, With<EditorCamera3dFree>>();
             state.iter(world).next().unwrap()
@@ -251,7 +241,7 @@ fn spawn_editor_cameras(mut commands: Commands, editor: Res<Editor>) {
                 //  Prevent multiple cameras from having the same priority.
                 order: editor_cam_priority + 1,
                 target: target.clone(),
-                is_active: false,
+                is_active: true,
                 ..default()
             },
             transform: Transform::from_xyz(0.0, 2.0, 5.0),
@@ -269,32 +259,9 @@ fn spawn_editor_cameras(mut commands: Commands, editor: Res<Editor>) {
         NotInScene,
         render_layers,
         RaycastPickCamera::default(),
+        ActiveEditorCamera,
     )).insert(GridShadowCamera);;
 
-    commands.spawn((
-        Camera2dBundle {
-            camera: Camera {
-                //  Prevent multiple cameras from having the same priority.
-                order: editor_cam_priority + 2,
-                target,
-                is_active: false,
-                ..default()
-            },
-            ..default()
-        },
-        UiCameraConfig {
-            show_ui: show_ui_by_default,
-        },
-        Ec2d,
-        camera_2d_panzoom::PanCamControls::default(),
-        EditorCamera,
-        EditorCamera2dPanZoom,
-        HideInEditor,
-        Name::new("Editor Camera 2D Pan/Zoom"),
-        NotInScene,
-        render_layers,
-        RaycastPickCamera::default(),
-    ));
 }
 
 fn set_editor_cam_active(
@@ -302,8 +269,7 @@ fn set_editor_cam_active(
 
     mut editor_cameras: ParamSet<(
         Query<(&mut Camera, &mut camera_3d_free::FlycamControls)>,
-        Query<(&mut Camera, &mut camera_3d_panorbit::PanOrbitCamera)>,
-        Query<(&mut Camera, &mut camera_2d_panzoom::PanCamControls)>,
+        Query<(&mut Camera, &mut camera_3d_panorbit::PanOrbitCamera)>
     )>,
 
     mut ui_camera_settings: Query<&mut UiCameraConfig, With<EditorCamera>>,
@@ -331,13 +297,7 @@ fn set_editor_cam_active(
         editor_cam_3d_panorbit.0.is_active = active;
         editor_cam_3d_panorbit.1.enabled = active && editor.viewport_interaction_active();
     }
-    {
-        let mut q = editor_cameras.p2();
-        let mut editor_cam_2d_panzoom = q.single_mut();
-        let active = matches!(editor_cam, EditorCamKind::D2PanZoom) && editor.active();
-        editor_cam_2d_panzoom.0.is_active = active;
-        editor_cam_2d_panzoom.1.enabled = active && editor.viewport_interaction_active();
-    }
+
 }
 
 #[derive(Resource, Default)]
@@ -506,9 +466,9 @@ fn initial_camera_setup(
 
         match (cam2d.is_some(), cam3d.is_some()) {
             (true, false) => {
-                camera_state.editor_cam = EditorCamKind::D2PanZoom;
+                camera_state.editor_cam = EditorCamKind::D3PanOrbit;
                 commands
-                    .entity(cameras.p0().single().0)
+                    .entity(cameras.p2().single().0)
                     .insert(ActiveEditorCamera);
                 *has_decided_initial_cam = true;
             }
