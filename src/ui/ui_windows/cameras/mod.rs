@@ -39,10 +39,6 @@ struct EditorCamera3dFree;
 #[derive(Component)]
 struct EditorCamera3dPanOrbit;
 
-// Marker component for the 2d pan+zoom camera
-#[derive(Component)]
-struct EditorCamera2dPanZoom;
-
 pub struct CameraWindow;
 
 #[derive(Clone, Copy, PartialEq)]
@@ -259,7 +255,7 @@ fn spawn_editor_cameras(mut commands: Commands, editor: Res<Editor>) {
         NotInScene,
         render_layers,
         RaycastPickCamera::default(),
-        ActiveEditorCamera,
+        ActiveEditorCamera
     )).insert(GridShadowCamera);;
 
 }
@@ -432,14 +428,11 @@ fn focus_selected(
 fn initial_camera_setup(
     mut has_decided_initial_cam: Local<bool>,
     mut was_positioned_3d: Local<bool>,
-    mut was_positioned_2d: Local<bool>,
 
     mut commands: Commands,
     mut editor: ResMut<Editor>,
 
     mut cameras: ParamSet<(
-        // 2d pan/zoom
-        Query<(Entity, &mut Transform), With<EditorCamera2dPanZoom>>,
         // 3d free
         Query<
             (Entity, &mut Transform, &mut camera_3d_free::FlycamControls),
@@ -450,60 +443,28 @@ fn initial_camera_setup(
             (
                 Entity,
                 &mut Transform,
-                &mut camera_3d_panorbit::PanOrbitCamera,
+                &mut PanOrbitCamera,
             ),
             With<EditorCamera3dPanOrbit>,
         >,
-        Query<&Transform, (With<Camera2d>, Without<EditorCamera>)>,
         Query<&Transform, (With<Camera3d>, Without<EditorCamera>)>,
     )>,
 ) {
-    let cam2d = cameras.p3().get_single().ok().cloned();
-    let cam3d = cameras.p4().get_single().ok().cloned();
+    let cam3d = cameras.p2().get_single().ok().cloned();
 
     if !*has_decided_initial_cam {
         let camera_state = editor.window_state_mut::<CameraWindow>().unwrap();
 
-        match (cam2d.is_some(), cam3d.is_some()) {
-            (true, false) => {
+        match cam3d.is_some() {
+            true => {
                 camera_state.editor_cam = EditorCamKind::D3PanOrbit;
                 commands
-                    .entity(cameras.p2().single().0)
+                    .entity(cameras.p1().single().0)
                     .insert(ActiveEditorCamera);
                 *has_decided_initial_cam = true;
             }
-            (false, true) => {
-                camera_state.editor_cam = EditorCamKind::D3PanOrbit;
-                commands
-                    .entity(cameras.p2().single().0)
-                    .insert(ActiveEditorCamera);
-                *has_decided_initial_cam = true;
-            }
-            (true, true) => {
-                camera_state.editor_cam = EditorCamKind::D3PanOrbit;
-                commands
-                    .entity(cameras.p2().single().0)
-                    .insert(ActiveEditorCamera);
-                *has_decided_initial_cam = true;
-            }
-            (false, false) => return,
-        }
-    }
 
-    if !*was_positioned_2d {
-        if let Some(cam2d_transform) = cam2d {
-            if !cam2d_transform.rotation.is_finite()
-                || !cam2d_transform.translation.is_finite()
-                || !cam2d_transform.scale.is_finite()
-            {
-                return;
-            };
-
-            let mut query = cameras.p0();
-            let (_, mut cam_transform) = query.single_mut();
-            *cam_transform = cam2d_transform;
-
-            *was_positioned_2d = true;
+            false => return
         }
     }
 
@@ -517,7 +478,7 @@ fn initial_camera_setup(
             };
 
             {
-                let mut query = cameras.p1();
+                let mut query = cameras.p0();
                 let (_, mut cam_transform, mut cam) = query.single_mut();
                 *cam_transform = cam3d_transform;
                 let (yaw, pitch, _) = cam3d_transform.rotation.to_euler(EulerRot::YXZ);
@@ -526,7 +487,7 @@ fn initial_camera_setup(
             }
 
             {
-                let mut query = cameras.p2();
+                let mut query = cameras.p1();
                 let (_, mut cam_transform, mut cam) = query.single_mut();
                 cam.radius = cam3d_transform.translation.distance(cam.focus);
                 *cam_transform = cam3d_transform;

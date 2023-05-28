@@ -17,20 +17,6 @@ pub fn setup_system(
         ..Default::default()
     }, Name::new("Grid"), HideInEditor));
 
-    // commands
-    //     .spawn((Camera3dBundle {
-    //         camera: Camera {
-    //             order: 150,
-    //             is_active: false,
-    //             ..default()
-    //         },
-    //         transform: Transform::from_xyz(0.0, 4.37, 14.77),
-    //         ..Default::default()
-    //     },
-    //         HideInEditor
-    //     ));
-
-
     commands.spawn(DirectionalLightBundle {
         transform: Transform::from_translation(Vec3::X * 15. + Vec3::Y * 20.)
             .looking_at(Vec3::ZERO, Vec3::Y),
