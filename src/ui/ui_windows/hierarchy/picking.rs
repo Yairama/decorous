@@ -1,8 +1,8 @@
 use bevy::{prelude::*, render::render_resource::PrimitiveTopology};
 use bevy_mod_picking::{DefaultPickingPlugins, PickableBundle};
 use bevy_mod_picking::prelude::*;
+use bevy_inspector_egui::egui::Ui;
 
-use egui::Ui;
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext};
 use crate::ui::ui_windows::cameras::camera_3d_panorbit::CameraSystem;
 

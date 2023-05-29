@@ -1,7 +1,8 @@
 use std::error::Error;
 use bevy::app::App;
 use bevy::prelude::World;
-use egui::Ui;
+use bevy_inspector_egui::egui::Ui;
+
 use crate::ui::ui_core::editor_window::{EditorWindowContext, MenuBarWindow};
 use crate::ui::ui_setup::editor_window::EditorWindow;
 

@@ -1,7 +1,7 @@
 use std::any::TypeId;
 use std::collections::HashMap;
 use bevy::prelude::*;
-use egui::RichText;
+use bevy_inspector_egui::egui;
 use indexmap::IndexMap;
 use crate::custom_meshes::topography_mesh::TopographyMesh;
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
@@ -103,10 +103,10 @@ fn make_ui(world: &mut World,
     if let Some(status) = &state.load_node_result {
         match status {
             Ok(()) => {
-                ui.label(RichText::new("Load Success!").color(egui::Color32::GREEN));
+                ui.label(egui::RichText::new("Load Success!").color(egui::Color32::GREEN));
             }
             Err(error) => {
-                ui.label(RichText::new(error.to_string()).color(egui::Color32::RED));
+                ui.label(egui::RichText::new(error.to_string()).color(egui::Color32::RED));
             }
         }
     }

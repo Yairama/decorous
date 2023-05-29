@@ -10,7 +10,7 @@ use bevy::pbr::wireframe::WireframePlugin;
 pub use crate::ui::ui_core::egui_dock;
 #[doc(inline)]
 pub use crate::ui::ui_core::{editor, editor_window, AddEditorWindow};
-pub use egui;
+
 
 
 pub use crate::ui::ui_windows as default_windows;
