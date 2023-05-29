@@ -229,7 +229,7 @@ fn spawn_editor_cameras(mut commands: Commands, editor: Res<Editor>) {
         NotInScene,
         render_layers,
         RaycastPickCamera::default(),
-    ));;
+    ));
 
     commands.spawn((
         Camera3dBundle {
@@ -256,7 +256,7 @@ fn spawn_editor_cameras(mut commands: Commands, editor: Res<Editor>) {
         render_layers,
         RaycastPickCamera::default(),
         ActiveEditorCamera
-    )).insert(GridShadowCamera);;
+    )).insert(GridShadowCamera);
 
 }
 

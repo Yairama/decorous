@@ -60,9 +60,9 @@ impl DrillHolesMesh {
         let p75_grade_cu = df_assay.column("cu").unwrap().f64().unwrap()
             .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
 
-        let p25_lithography = df_lithography.column("rock").unwrap().i64().unwrap()
+        let _p25_lithography = df_lithography.column("rock").unwrap().i64().unwrap()
             .quantile(0.25, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
-        let p75_lithography = df_lithography.column("rock").unwrap().i64().unwrap()
+        let _p75_lithography = df_lithography.column("rock").unwrap().i64().unwrap()
             .quantile(0.75, QuantileInterpolOptions::Linear).unwrap().unwrap() as f32;
 
 
@@ -121,7 +121,7 @@ impl DrillHolesMesh {
                     to
                 );
 
-                let mut prisma_mesh = Self::generate_triangular_prisma(
+                let prisma_mesh = Self::generate_triangular_prisma(
                     &grade_from_coord,
                     &grade_to_coord,
                     3.0);

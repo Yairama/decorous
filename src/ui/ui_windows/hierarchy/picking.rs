@@ -1,12 +1,10 @@
 use bevy::{prelude::*, render::render_resource::PrimitiveTopology};
-use bevy_mod_picking::{DefaultPickingPlugins, PickableBundle};
+use bevy_mod_picking::{PickableBundle};
 use bevy_mod_picking::prelude::*;
 use bevy_inspector_egui::egui::Ui;
 
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext};
 use crate::ui::ui_windows::cameras::camera_3d_panorbit::CameraSystem;
-
-pub struct EditorPickingSet;
 
 /// Prevents the entity from being selectable in the editor window.
 #[derive(Component)]
@@ -18,7 +16,7 @@ impl EditorWindow for PickingWindow {
     type State = ();
     const NAME: &'static str = "PickingWindow";
 
-    fn ui(world: &mut World, cx: EditorWindowContext, ui: &mut Ui) {
+    fn ui(_world: &mut World, _cx: EditorWindowContext, ui: &mut Ui) {
         ui.label("OAAAAAAAAAAAA");
     }
 

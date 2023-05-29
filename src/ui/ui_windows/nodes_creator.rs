@@ -1,12 +1,12 @@
-use std::any::TypeId;
-use std::collections::HashMap;
+
+
 use bevy::prelude::*;
 use bevy_inspector_egui::egui;
-use indexmap::IndexMap;
+
 use crate::custom_meshes::topography_mesh::TopographyMesh;
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use crate::ui::ui_file_loader::files::{CsvFile, DxfFile, FileProperties};
-use crate::ui::ui_core::editor::{EditorWindowState, EditorWindowData};
+
 use crate::ui::ui_windows::load_drills::LoadDrills;
 
 
@@ -74,6 +74,8 @@ fn make_ui(world: &mut World,
                                                 path: Some(path.display().to_string()).unwrap()
                                             };
                                             result = Option::from(generate_topography_mesh_from_dxf(&dxf, world));
+                                            let state = cx.state_mut::<NodesCreator>().unwrap();
+                                            state.load_node_result=result;
                                         }
                                     }
 

@@ -5,13 +5,13 @@ use bevy::pbr::wireframe::Wireframe;
 use bevy::prelude::*;
 use bevy::reflect::TypeRegistryInternal;
 use bevy::render::{Extract, RenderApp};
-use bevy_egui::EguiContext;
+
 
 
 use bevy_inspector_egui::bevy_inspector::guess_entity_name;
-use bevy_inspector_egui::bevy_inspector::hierarchy::{SelectedEntities, SelectionMode};
+use bevy_inspector_egui::bevy_inspector::hierarchy::{SelectedEntities};
 use bevy_inspector_egui::egui::{self, ScrollArea};
-use bevy_mod_picking::prelude::PointerButton;
+
 
 
 use crate::ui::ui_core::{

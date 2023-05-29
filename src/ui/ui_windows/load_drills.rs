@@ -1,4 +1,4 @@
-use std::any::TypeId;
+
 use std::error::Error;
 
 use bevy::{
@@ -9,7 +9,7 @@ use bevy::prelude::{Entity, With};
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::egui;
 use egui::{RichText};
-use indexmap::IndexMap;
+
 use crate::custom_meshes::topography_mesh::TopographyMesh;
 use crate::custom_meshes::drill_holes_mesh::DrillHolesMesh;
 use crate::ui::ui_file_loader::files::CsvFile;

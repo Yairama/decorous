@@ -9,8 +9,6 @@ use delaunator::{Point, triangulate};
 use bevy::render::mesh::{PrimitiveTopology};
 
 use csv::ReaderBuilder;
-
-use polars::prelude::*;
 use crate::ui::ui_file_loader::files::{CsvFile};
 
 

@@ -14,7 +14,7 @@ pub use crate::ui::ui_core::{editor, editor_window, AddEditorWindow};
 
 
 pub use crate::ui::ui_windows as default_windows;
-use crate::ui::ui_windows::hierarchy::picking::PickingWindow;
+
 use crate::ui::ui_windows::load_drills::LoadDrills;
 use crate::ui::ui_windows::nodes_creator::NodesCreator;
 
