@@ -1,6 +1,6 @@
 use bevy::prelude::{App, World};
 use bevy::utils::HashMap;
-use bevy_inspector_egui::egui;
+use bevy_egui::egui;
 use std::any::{Any, TypeId};
 
 use super::editor::EditorWindowState;

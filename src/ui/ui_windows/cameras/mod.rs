@@ -12,7 +12,7 @@ use crate::ui::ui_core::{
     editor_window::{EditorWindow, EditorWindowContext},
     Editor, EditorEvent,
 };
-use bevy_inspector_egui::egui;
+use bevy_egui::egui;
 use bevy_mod_picking::prelude::RaycastPickCamera;
 // use bevy_mod_picking::prelude::PickRaycastSource;
 

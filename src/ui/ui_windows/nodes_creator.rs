@@ -1,7 +1,7 @@
 
 
 use bevy::prelude::*;
-use bevy_inspector_egui::egui;
+use bevy_egui::egui;
 
 use crate::custom_meshes::topography_mesh::TopographyMesh;
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};

@@ -8,9 +8,9 @@ use bevy::{
 };
 use crate::ui::ui_core::editor_window::EditorWindow;
 use bevy_inspector_egui::{
-    egui::{self, Grid},
     reflect_inspector::ui_for_value,
 };
+use bevy_egui::egui;
 
 pub struct DebugSettingsWindowState {
     pub pause_time: bool,
@@ -98,7 +98,7 @@ fn debug_ui_options(
     ui: &mut egui::Ui,
     type_registry: &TypeRegistryInternal,
 ) {
-    Grid::new("debug settings").show(ui, |ui| {
+    egui::Grid::new("debug settings").show(ui, |ui| {
         ui.label("Pause time");
         if ui.checkbox(&mut state.pause_time, "").changed() {
             let mut time = world.resource_mut::<Time>();

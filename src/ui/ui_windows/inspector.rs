@@ -7,7 +7,8 @@ use bevy::prelude::{AppTypeRegistry, Entity, World};
 use bevy::reflect::TypeRegistryInternal;
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::bevy_inspector::hierarchy::SelectedEntities;
-use bevy_inspector_egui::{bevy_inspector, egui};
+use bevy_inspector_egui::{bevy_inspector};
+use bevy_egui::egui;
 
 #[derive(Eq, PartialEq)]
 pub enum InspectorSelection {

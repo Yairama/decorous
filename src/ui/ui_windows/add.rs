@@ -7,7 +7,7 @@ use bevy::{
     render::view::RenderLayers,
 };
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
-use bevy_inspector_egui::egui;
+use bevy_egui::egui;
 use indexmap::IndexMap;
 
 use super::hierarchy::HierarchyWindow;

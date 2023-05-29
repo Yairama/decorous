@@ -1,6 +1,6 @@
 use bevy::{diagnostic::Diagnostics, prelude::*};
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
-use bevy_inspector_egui::egui;
+use bevy_egui::egui;
 
 pub struct DiagnosticsWindow;
 impl EditorWindow for DiagnosticsWindow {

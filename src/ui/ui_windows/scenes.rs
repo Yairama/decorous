@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
-use bevy_inspector_egui::egui::{self, RichText};
+use bevy_egui::egui;
 
 const DEFAULT_FILENAME: &str = "scene.scn.ron";
 
@@ -50,10 +50,10 @@ impl EditorWindow for SceneWindow {
         if let Some(status) = &state.scene_save_result {
             match status {
                 Ok(()) => {
-                    ui.label(RichText::new("Success!").color(egui::Color32::GREEN));
+                    ui.label(egui::RichText::new("Success!").color(egui::Color32::GREEN));
                 }
                 Err(error) => {
-                    ui.label(RichText::new(error.to_string()).color(egui::Color32::RED));
+                    ui.label(egui::RichText::new(error.to_string()).color(egui::Color32::RED));
                 }
             }
         }

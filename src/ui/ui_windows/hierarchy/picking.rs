@@ -1,7 +1,7 @@
 use bevy::{prelude::*, render::render_resource::PrimitiveTopology};
 use bevy_mod_picking::{PickableBundle};
 use bevy_mod_picking::prelude::*;
-use bevy_inspector_egui::egui::Ui;
+use bevy_egui::egui;
 
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext};
 use crate::ui::ui_windows::cameras::camera_3d_panorbit::CameraSystem;
@@ -16,7 +16,7 @@ impl EditorWindow for PickingWindow {
     type State = ();
     const NAME: &'static str = "PickingWindow";
 
-    fn ui(_world: &mut World, _cx: EditorWindowContext, ui: &mut Ui) {
+    fn ui(_world: &mut World, _cx: EditorWindowContext, ui: &mut egui::Ui) {
         ui.label("OAAAAAAAAAAAA");
     }
 

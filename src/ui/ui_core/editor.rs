@@ -3,7 +3,8 @@ use std::any::{Any, TypeId};
 use bevy::ecs::event::Events;
 use bevy::window::{WindowMode};
 use bevy::{prelude::*, utils::HashMap};
-use bevy_inspector_egui::bevy_egui::{egui, EguiContext};
+use bevy_egui::{EguiContext};
+use bevy_egui::egui;
 use egui::Pos2;
 use egui_dock::{NodeIndex, TabBarStyle, TabIndex};
 use indexmap::IndexMap;
@@ -339,6 +340,9 @@ impl Editor {
             egui_dock::Tree::new(Vec::default()),
         );
 
+        let a = ctx.style().as_ref();
+
+
         egui_dock::DockArea::new(&mut tree)
             .style(egui_dock::Style {
                 // tab_bar_background_color: ctx.style().visuals.window_fill(),
@@ -540,7 +544,7 @@ struct TabViewer<'a> {
 impl egui_dock::TabViewer for TabViewer<'_> {
     type Tab = TreeTab;
 
-    fn ui(&mut self, ui: &mut egui::Ui, tab: &mut Self::Tab) {
+    fn ui(&mut self, ui: &mut egui_dock::egui::Ui, tab: &mut Self::Tab) {
         match *tab {
             TreeTab::GameView => {
                 let viewport = ui.clip_rect();
@@ -568,12 +572,12 @@ impl egui_dock::TabViewer for TabViewer<'_> {
         }
     }
 
-    fn context_menu(&mut self, ui: &mut egui::Ui, tab: &mut Self::Tab) {
+    fn context_menu(&mut self, ui: &mut egui_dock::egui::Ui, tab: &mut Self::Tab) {
         self.editor
             .editor_window_context_menu(ui, self.internal_state, *tab);
     }
 
-    fn title(&mut self, tab: &mut Self::Tab) -> egui::WidgetText {
+    fn title(&mut self, tab: &mut Self::Tab) -> egui_dock::egui::WidgetText {
         match *tab {
             TreeTab::GameView => "Viewport".into(),
             TreeTab::CustomWindow(window_id) => {

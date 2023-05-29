@@ -1,10 +1,10 @@
 use bevy::{pbr::DirectionalLightShadowMap, prelude::*, render::renderer::RenderDevice};
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
 use bevy_inspector_egui::{
-    egui::{self, RichText},
     inspector_options::std_options::NumberOptions,
     reflect_inspector::{Context, InspectorUi},
 };
+use bevy_egui::egui;
 
 pub struct RendererWindow;
 
@@ -48,12 +48,12 @@ impl EditorWindow for RendererWindow {
                 });
 
                 ui.collapsing("Limits", |ui| {
-                    ui.label(RichText::new(format!("{:#?}", limits)).monospace());
+                    ui.label(egui::RichText::new(format!("{:#?}", limits)).monospace());
                 });
                 ui.collapsing("Features", |ui| {
                     let features = format!("{:#?}", features);
                     for feature in features.split(" | ") {
-                        ui.label(RichText::new(format!("- {}", feature)).monospace());
+                        ui.label(egui::RichText::new(format!("- {}", feature)).monospace());
                     }
                 });
             });

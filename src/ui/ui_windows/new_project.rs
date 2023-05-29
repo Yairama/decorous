@@ -2,7 +2,7 @@ use bevy::{
     prelude::{World},
 };
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
-use bevy_inspector_egui::egui;
+use bevy_egui::egui;
 
 
 pub struct NewProject;

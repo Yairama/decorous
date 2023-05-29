@@ -6,11 +6,9 @@ use bevy::prelude::*;
 use bevy::reflect::TypeRegistryInternal;
 use bevy::render::{Extract, RenderApp};
 
-
-
 use bevy_inspector_egui::bevy_inspector::guess_entity_name;
 use bevy_inspector_egui::bevy_inspector::hierarchy::{SelectedEntities};
-use bevy_inspector_egui::egui::{self, ScrollArea};
+use bevy_egui::egui;
 
 
 
@@ -18,9 +16,6 @@ use crate::ui::ui_core::{
     editor_window::{EditorWindow, EditorWindowContext},
     Editor,
 };
-
-
-
 
 use crate::ui::ui_windows::nodes_creator::NodesCreator;
 // use bevy_mod_picking::backends::egui::EguiPointer;
@@ -55,7 +50,7 @@ impl EditorWindow for HierarchyWindow {
 
 
 
-        ScrollArea::vertical()
+        egui::ScrollArea::vertical()
             .auto_shrink([false, false])
             .show(ui, |ui| {
                 let type_registry = world.resource::<AppTypeRegistry>().clone();

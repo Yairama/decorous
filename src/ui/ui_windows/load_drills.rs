@@ -7,7 +7,7 @@ use bevy::{
 
 use bevy::prelude::{Entity, With};
 use crate::ui::ui_core::editor_window::{EditorWindow, EditorWindowContext, MenuBarWindow};
-use bevy_inspector_egui::egui;
+use bevy_egui::egui;
 use egui::{RichText};
 
 use crate::custom_meshes::topography_mesh::TopographyMesh;
