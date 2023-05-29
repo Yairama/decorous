@@ -512,7 +512,6 @@ fn set_main_pass_viewport(
 
     let viewport = editor.active().then(|| {
         let scale_factor = window.scale_factor() * egui_settings.scale_factor;
-
         let viewport_pos = editor.viewport().left_top().to_vec2() * scale_factor as f32;
         let viewport_size = editor.viewport().size() * scale_factor as f32;
 

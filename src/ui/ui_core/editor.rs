@@ -4,6 +4,7 @@ use bevy::ecs::event::Events;
 use bevy::window::{WindowMode};
 use bevy::{prelude::*, utils::HashMap};
 use bevy_inspector_egui::bevy_egui::{egui, EguiContext};
+use egui::Pos2;
 use egui_dock::{NodeIndex, TabBarStyle, TabIndex};
 use indexmap::IndexMap;
 
@@ -551,8 +552,11 @@ impl egui_dock::TabViewer for TabViewer<'_> {
                     self.editor
                         .editor_viewport_toolbar_ui(self.world, ui, self.internal_state);
                 });
-
-                self.editor.viewport = viewport;
+                if !viewport.is_finite(){
+                    self.editor.viewport = egui::Rect{min: Pos2{x:0.0, y:0.0}, max: Pos2{x:100.0, y:100.0}};
+                }else {
+                    self.editor.viewport = viewport
+                }
 
                 self.editor
                     .editor_viewport_ui(self.world, ui, self.internal_state);
